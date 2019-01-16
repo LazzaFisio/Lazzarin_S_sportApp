@@ -12,6 +12,8 @@
 		F71EB2B621EF2E38009810B9 /* cerchio.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2B321EF2E38009810B9 /* cerchio.png */; };
 		F71EB2B721EF2E38009810B9 /* rugby.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2B421EF2E38009810B9 /* rugby.png */; };
 		F71EB2B821EF2E38009810B9 /* motorsport.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2B521EF2E38009810B9 /* motorsport.png */; };
+		F71EB2BF21EF37C4009810B9 /* stellaPiena.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2BE21EF37C4009810B9 /* stellaPiena.png */; };
+		F71EB2C121EF37CC009810B9 /* stellaVuota.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2C021EF37CC009810B9 /* stellaVuota.png */; };
 		F74991BB21EF29C300BAB175 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74991BA21EF29C300BAB175 /* AppDelegate.swift */; };
 		F74991C021EF29C300BAB175 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F74991BE21EF29C300BAB175 /* Main.storyboard */; };
 		F74991C221EF29C500BAB175 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F74991C121EF29C500BAB175 /* Assets.xcassets */; };
@@ -43,6 +45,8 @@
 		F71EB2B321EF2E38009810B9 /* cerchio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cerchio.png; sourceTree = "<group>"; };
 		F71EB2B421EF2E38009810B9 /* rugby.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rugby.png; sourceTree = "<group>"; };
 		F71EB2B521EF2E38009810B9 /* motorsport.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motorsport.png; sourceTree = "<group>"; };
+		F71EB2BE21EF37C4009810B9 /* stellaPiena.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stellaPiena.png; sourceTree = "<group>"; };
+		F71EB2C021EF37CC009810B9 /* stellaVuota.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stellaVuota.png; sourceTree = "<group>"; };
 		F74991B721EF29C300BAB175 /* Lazzarin_S_sportApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lazzarin_S_sportApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F74991BA21EF29C300BAB175 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F74991BF21EF29C300BAB175 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -85,9 +89,7 @@
 		F71EB2AC21EF2D61009810B9 /* Immagini */ = {
 			isa = PBXGroup;
 			children = (
-				F71EB2B321EF2E38009810B9 /* cerchio.png */,
-				F71EB2B521EF2E38009810B9 /* motorsport.png */,
-				F71EB2B421EF2E38009810B9 /* rugby.png */,
+				F71EB2BD21EF3648009810B9 /* View sport */,
 			);
 			path = Immagini;
 			sourceTree = "<group>";
@@ -95,6 +97,7 @@
 		F71EB2AD21EF2D70009810B9 /* Classi */ = {
 			isa = PBXGroup;
 			children = (
+				F71EB2B121EF2E27009810B9 /* Info.swift */,
 				F71EB2AE21EF2DC5009810B9 /* ViewController */,
 			);
 			path = Classi;
@@ -106,6 +109,18 @@
 				F71EB2AF21EF2E08009810B9 /* Sport.swift */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		F71EB2BD21EF3648009810B9 /* View sport */ = {
+			isa = PBXGroup;
+			children = (
+				F71EB2B321EF2E38009810B9 /* cerchio.png */,
+				F71EB2B521EF2E38009810B9 /* motorsport.png */,
+				F71EB2B421EF2E38009810B9 /* rugby.png */,
+				F71EB2BE21EF37C4009810B9 /* stellaPiena.png */,
+				F71EB2C021EF37CC009810B9 /* stellaVuota.png */,
+			);
+			path = "View sport";
 			sourceTree = "<group>";
 		};
 		F74991AE21EF29C300BAB175 = {
@@ -132,7 +147,6 @@
 			isa = PBXGroup;
 			children = (
 				F71EB2AD21EF2D70009810B9 /* Classi */,
-				F71EB2B121EF2E27009810B9 /* Info.swift */,
 				F71EB2AC21EF2D61009810B9 /* Immagini */,
 				F74991BA21EF29C300BAB175 /* AppDelegate.swift */,
 				F74991BE21EF29C300BAB175 /* Main.storyboard */,
@@ -271,6 +285,8 @@
 				F74991C521EF29C500BAB175 /* LaunchScreen.storyboard in Resources */,
 				F74991C221EF29C500BAB175 /* Assets.xcassets in Resources */,
 				F74991C021EF29C300BAB175 /* Main.storyboard in Resources */,
+				F71EB2C121EF37CC009810B9 /* stellaVuota.png in Resources */,
+				F71EB2BF21EF37C4009810B9 /* stellaPiena.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

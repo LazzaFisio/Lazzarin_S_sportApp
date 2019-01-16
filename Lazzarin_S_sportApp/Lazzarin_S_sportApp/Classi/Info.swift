@@ -13,28 +13,26 @@ class Info{
     
     static var errore : String = ""
     static var ricerca : String = ""
+    static var condizione : Bool = false
     static var selezionato : [String : Any] = [:]
-    static let sports = ["Rugby"]
     static var json : Array<NSDictionary> = []
     
     public static func caricaJson(query : String, ricerca : String){
         self.ricerca = ricerca
         let url = URL(string: query)
         let session = URLSession.shared
-        var cond = false
         session.dataTask(with: url!) { (data, response, error) in
             do{
                 let risposta = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String : Array<NSDictionary>]
                 for item in risposta{
                     json = item.value
                 }
-                cond = true
+                condizione = true
             }catch{
                 errore = error as! String
-                cond = true
+                condizione = true
             }
         }.resume()
-        while !cond {}
     }
     
     public static func elementi(key : String) -> [String]{
@@ -49,19 +47,43 @@ class Info{
         let url = URL(string: url)
         let session = URLSession.shared
         var immagine = UIImage()
-        var cond = false
         session.dataTask(with: url!) { (data, res, error) in
             guard let data = data, error == nil
             else
             {
                 errore = error as! String
-                cond = true
+                condizione = true
                 return
             }
             immagine = UIImage(data: data)!
-            cond = true
+            condizione = true
         }.resume()
-        while !cond {}
+        while !condizione {}
         return immagine
+    }
+    
+    public static func creaView(viewPrincipale : UIView, dimensioni : [CGRect], immagini : [UIImage], testo : String, stella : [Bool], tag : Int){
+        let view = UIView(frame: dimensioni[0])
+        let bottone = UIButton(frame: dimensioni[1])
+        bottone.setImage(immagini[0], for: .normal)
+        bottone.tag = tag
+        let label = UILabel(frame: dimensioni[2])
+        label.text = testo
+        label.textAlignment = NSTextAlignment.center
+        let immagine = UIImageView(frame: dimensioni[3])
+        immagine.image = immagini[1]
+        if stella[0] {
+            let immStella = UIImageView(frame: dimensioni[4])
+            if stella[1]{
+                immStella.image = UIImage(named: "stellaPiena.png")
+            }else{
+                immStella.image = UIImage(named: "stellaVuota.png")
+            }
+            view.addSubview(immStella)
+        }
+        view.addSubview(bottone)
+        view.addSubview(label)
+        view.addSubview(immagine)
+        viewPrincipale.addSubview(view)
     }
 }
