@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  Sport.swift
 //  Lazzarin_S_sportApp
 //
 //  Created by Leonardo Lazzarin on 16/01/2019.
@@ -8,13 +8,12 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class Sport: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        // Do any additional setup after loading the view.
     }
 
-
 }
-
