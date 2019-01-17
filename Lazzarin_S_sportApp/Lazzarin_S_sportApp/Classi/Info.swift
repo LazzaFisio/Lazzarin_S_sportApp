@@ -33,6 +33,8 @@ class Info{
                 condizione = true
             }
         }.resume()
+        while !condizione {}
+        condizione = false
     }
     
     public static func elementi(key : String) -> [String]{
@@ -59,6 +61,7 @@ class Info{
             condizione = true
         }.resume()
         while !condizione {}
+        condizione = false
         return immagine
     }
     
