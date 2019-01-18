@@ -14,23 +14,28 @@ class Info{
     static var errore : String = ""
     static var ricerca : String = ""
     static var condizione : Bool = false
-    static var selezionato : [String : Any] = [:]
     static var json : Array<NSDictionary> = []
+    static var selezionato = NSDictionary()
     
     public static func caricaJson(query : String, ricerca : String){
         self.ricerca = ricerca
         let url = URL(string: query)
         let session = URLSession.shared
         session.dataTask(with: url!) { (data, response, error) in
-            do{
-                let risposta = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String : Array<NSDictionary>]
-                for item in risposta{
-                    json = item.value
+            if error == nil{
+                do{
+                    let risposta = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String : Array<NSDictionary>]
+                    for item in risposta{
+                        json = item.value
+                    }
+                    condizione = true
+                }catch{
+                    errore = error as! String
+                    condizione = true
                 }
+            }else{
                 condizione = true
-            }catch{
                 errore = error as! String
-                condizione = true
             }
         }.resume()
         while !condizione {}
@@ -65,16 +70,20 @@ class Info{
         return immagine
     }
     
-    public static func creaView(viewPrincipale : UIView, dimensioni : [CGRect], immagini : [UIImage], testo : String, stella : [Bool], tag : Int){
+    public static func aggiungiSelezionato(tag : Int){
+        selezionato = json[tag]
+    }
+    
+    public static func creaView(dimensioni : [CGRect], imm : UIImage, testo : String, stella : [Bool], tag : Int) -> UIView{
         let view = UIView(frame: dimensioni[0])
         let bottone = UIButton(frame: dimensioni[1])
-        bottone.setImage(immagini[0], for: .normal)
+        bottone.setImage(UIImage(named: "cerchio.png"), for: .normal)
         bottone.tag = tag
         let label = UILabel(frame: dimensioni[2])
         label.text = testo
         label.textAlignment = NSTextAlignment.center
         let immagine = UIImageView(frame: dimensioni[3])
-        immagine.image = immagini[1]
+        immagine.image = imm
         if stella[0] {
             let immStella = UIImageView(frame: dimensioni[4])
             if stella[1]{
@@ -87,6 +96,6 @@ class Info{
         view.addSubview(bottone)
         view.addSubview(label)
         view.addSubview(immagine)
-        viewPrincipale.addSubview(view)
+        return view
     }
 }

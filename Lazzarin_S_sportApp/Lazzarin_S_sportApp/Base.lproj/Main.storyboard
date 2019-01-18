@@ -20,7 +20,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Gg6-1l-vOT"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Preferiti" image="stellaPienaIcona" id="Pn0-Bf-E3K"/>
+                    <tabBarItem key="tabBarItem" title="Preferiti" image="stellaIco.png" id="Pn0-Bf-E3K"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T61-Eq-Ifv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -36,7 +36,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="gT4-LG-bRH"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Live" image="cerchioIcona" id="h7s-qR-cok"/>
+                    <tabBarItem key="tabBarItem" title="Live" image="calcioIco.png" id="h7s-qR-cok">
+                        <color key="badgeColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </tabBarItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DPK-MS-qKN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -59,7 +61,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mzf-Nn-MUd">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" indicatorStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="mzf-Nn-MUd">
                                 <rect key="frame" x="0.0" y="104" width="375" height="514"/>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aqd-6b-3KO">
@@ -68,6 +70,13 @@
                                 <state key="normal" title="&lt;"/>
                                 <connections>
                                     <action selector="indietro:" destination="Id4-Mi-RkS" eventType="touchUpInside" id="j2D-V7-kDa"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lcQ-EK-DGQ">
+                                <rect key="frame" x="307" y="41" width="48" height="48"/>
+                                <state key="normal" backgroundImage="info.png"/>
+                                <connections>
+                                    <action selector="infoAzione:" destination="Id4-Mi-RkS" eventType="touchUpInside" id="lpD-IE-OT0"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -79,17 +88,21 @@
                             <constraint firstItem="mzf-Nn-MUd" firstAttribute="leading" secondItem="QCR-PL-3jT" secondAttribute="leading" id="Mfx-Mm-Z63"/>
                             <constraint firstItem="mzf-Nn-MUd" firstAttribute="top" secondItem="HEn-cn-BoE" secondAttribute="bottom" constant="20" id="UgU-q5-3rL"/>
                             <constraint firstItem="QCR-PL-3jT" firstAttribute="bottom" secondItem="mzf-Nn-MUd" secondAttribute="bottom" id="Wzn-P9-aFI"/>
+                            <constraint firstItem="mzf-Nn-MUd" firstAttribute="top" secondItem="lcQ-EK-DGQ" secondAttribute="bottom" constant="15" id="YCa-lm-Pk2"/>
                             <constraint firstItem="QCR-PL-3jT" firstAttribute="trailing" secondItem="HEn-cn-BoE" secondAttribute="trailing" constant="100" id="baD-4C-PIs"/>
+                            <constraint firstItem="lcQ-EK-DGQ" firstAttribute="leading" secondItem="HEn-cn-BoE" secondAttribute="trailing" constant="32" id="dCu-y9-s0x"/>
                             <constraint firstItem="HEn-cn-BoE" firstAttribute="leading" secondItem="Aqd-6b-3KO" secondAttribute="trailing" constant="46" id="ddC-tt-scJ"/>
                             <constraint firstItem="HEn-cn-BoE" firstAttribute="top" secondItem="QCR-PL-3jT" secondAttribute="top" constant="40" id="l9B-jH-euz"/>
                             <constraint firstItem="mzf-Nn-MUd" firstAttribute="top" secondItem="Aqd-6b-3KO" secondAttribute="bottom" constant="14" id="mlO-Qq-U4e"/>
+                            <constraint firstItem="QCR-PL-3jT" firstAttribute="trailing" secondItem="lcQ-EK-DGQ" secondAttribute="trailing" constant="20" id="udg-GD-xv7"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QCR-PL-3jT"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Sport" id="Ywp-f5-LVN"/>
+                    <tabBarItem key="tabBarItem" title="Sport" image="campoIco.png" id="Ywp-f5-LVN"/>
                     <connections>
                         <outlet property="back" destination="Aqd-6b-3KO" id="YFZ-Qu-BbF"/>
                         <outlet property="contenitore" destination="mzf-Nn-MUd" id="6Xc-Gi-mcL"/>
+                        <outlet property="info" destination="lcQ-EK-DGQ" id="w26-Uv-grZ"/>
                         <outlet property="titolo" destination="HEn-cn-BoE" id="5RE-R8-gkZ"/>
                     </connections>
                 </viewController>
@@ -118,7 +131,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="cerchioIcona" width="54" height="54"/>
-        <image name="stellaPienaIcona" width="36" height="36"/>
+        <image name="calcioIco.png" width="30" height="30"/>
+        <image name="campoIco.png" width="30" height="30"/>
+        <image name="info.png" width="48" height="48"/>
+        <image name="stellaIco.png" width="30" height="30"/>
     </resources>
 </document>
