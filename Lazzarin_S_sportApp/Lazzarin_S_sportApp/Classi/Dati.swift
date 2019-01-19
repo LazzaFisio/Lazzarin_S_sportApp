@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class Info{
+class Dati{
     
     static var errore : String = ""
     static var ricerca : String = ""
@@ -24,22 +24,21 @@ class Info{
         session.dataTask(with: url!) { (data, response, error) in
             if error == nil{
                 do{
-                    let risposta = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String : Array<NSDictionary>]
-                    for item in risposta{
-                        json = item.value
+                    if let risposta = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [String : Array<NSDictionary>]{
+                        for item in risposta{
+                            json = item.value
+                        }
+                    }else{
+                        errore = "nessun dato trovato"
+                        json = Array<NSDictionary>()
                     }
-                    condizione = true
-                }catch{
-                    errore = error as! String
-                    condizione = true
-                }
-            }else{
-                condizione = true
-                errore = error as! String
-            }
+                }catch{ errore = "errore" }
+            }else{ errore = "Errore di connessione" }
+            condizione = true
         }.resume()
         while !condizione {}
         condizione = false
+        errore = ""
     }
     
     public static func elementi(key : String) -> [String]{
@@ -50,23 +49,25 @@ class Info{
         return oggetti
     }
     
-    public static func immagine(url : String) -> UIImage{
-        let url = URL(string: url)
+    public static func immagine(stringa : String) -> UIImage{
+        let url = URL(string: stringa)
         let session = URLSession.shared
         var immagine = UIImage()
-        session.dataTask(with: url!) { (data, res, error) in
-            guard let data = data, error == nil
-            else
-            {
-                errore = error as! String
+        if stringa != ""{
+            session.dataTask(with: url!) { (data, res, error) in
+                guard let data = data, error == nil
+                else
+                {
+                    errore = "erorre si connessione"
+                    return
+                }
+                immagine = UIImage(data: data)!
                 condizione = true
-                return
-            }
-            immagine = UIImage(data: data)!
-            condizione = true
-        }.resume()
-        while !condizione {}
-        condizione = false
+                }.resume()
+            while !condizione {}
+            condizione = false
+            errore = ""
+        }
         return immagine
     }
     
@@ -80,6 +81,7 @@ class Info{
         bottone.setImage(UIImage(named: "cerchio.png"), for: .normal)
         bottone.tag = tag
         let label = UILabel(frame: dimensioni[2])
+        label.numberOfLines = 0
         label.text = testo
         label.textAlignment = NSTextAlignment.center
         let immagine = UIImageView(frame: dimensioni[3])
