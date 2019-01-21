@@ -16,6 +16,7 @@ class Dati{
     static var condizione : Bool = false
     static var json : Array<NSDictionary> = []
     static var selezionato = NSDictionary()
+    static var informazioni = NSDictionary()
     
     public static func caricaJson(query : String, ricerca : String){
         self.ricerca = ricerca
@@ -73,6 +74,11 @@ class Dati{
     
     public static func aggiungiSelezionato(tag : Int){
         selezionato = json[tag]
+        informazioni = NSDictionary()
+    }
+    
+    public static func aggiungiSelezionatoInformazioni(tag : Int){
+        informazioni = json[tag]
     }
     
     public static func creaView(dimensioni : [CGRect], imm : UIImage, testo : String, stella : [Bool], tag : Int) -> UIView{

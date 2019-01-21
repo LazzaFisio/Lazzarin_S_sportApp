@@ -25,6 +25,7 @@ class Sport: UIViewController {
     
     var timer = Timer()
     var secondi = 0
+    var bottoneSelezionato = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,21 +54,21 @@ class Sport: UIViewController {
         cerca.isHidden = true
     }
     
-    func crea(strTitolo : String, immagini : [UIImage], nomeTitolo : String, azione : Selector){
+    func crea(strTitolo : String, immagini : [UIImage], nomeTitolo : String, azione : Selector, stelle : [Bool]){
         var i = 0
         var height = 0
         var view = UIView()
         while i < Dati.json.count{
             var testo = Dati.elementi(key: nomeTitolo)[i]
-            var dimensioni = arrayDimensioni(view: CGRect(x: 30, y: height, width: 148, height: 168), testo: testo, stella: true)
-            view = Dati.creaView(dimensioni: dimensioni, imm: immagini[i], testo: testo, stella: [true, false], tag: i)
+            var dimensioni = arrayDimensioni(view: CGRect(x: 30, y: height, width: 148, height: 168), testo: testo, stella: stelle[0])
+            view = Dati.creaView(dimensioni: dimensioni, imm: immagini[i], testo: testo, stella: stelle, tag: i)
             aggiungiAzione(azione: azione, view: view)
             contenitore.addSubview(view)
             i += 1
             if i < Dati.json.count{
                 testo = Dati.elementi(key: nomeTitolo)[i]
-                dimensioni = arrayDimensioni(view: CGRect(x: Int(self.view.frame.width) - (30 + 148), y: height, width: 148, height: 168), testo: testo, stella: true)
-                view = Dati.creaView(dimensioni: dimensioni, imm: immagini[i], testo: Dati.elementi(key: nomeTitolo)[i], stella: [true, false], tag: i)
+                dimensioni = arrayDimensioni(view: CGRect(x: Int(self.view.frame.width) - (30 + 148), y: height, width: 148, height: 168), testo: testo, stella: stelle[0])
+                view = Dati.creaView(dimensioni: dimensioni, imm: immagini[i], testo: Dati.elementi(key: nomeTitolo)[i], stella: stelle, tag: i)
                 aggiungiAzione(azione: azione, view: view)
                 contenitore.addSubview(view)
             }
@@ -98,7 +99,7 @@ class Sport: UIViewController {
         }
         dimensioni.append(CGRect(x: 40, y: 40, width: 60, height: 60))
         if stella{
-            dimensioni.append(CGRect(x: 92, y: 0, width: 40, height: 40))
+            dimensioni.append(CGRect(x: 100, y: 0, width: 40, height: 40))
         }
         return dimensioni
     }
@@ -122,19 +123,20 @@ class Sport: UIViewController {
             creaSport()
         }else if Dati.ricerca == "team"{
             let sport = Dati.selezionato.value(forKey: "strSport") as! String
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "leghe", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: -1, azione: #selector(azioneLeghe(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "leghe", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: -1, azione: #selector(azioneLeghe(sender:)), stelle: [true, false])
         }else{
             let team = Dati.selezionato.value(forKey: "strLeague") as! String
             let nome = team.replacingOccurrences(of: " ", with: "_")
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "team", "strTeamBadge", "strTeam"], titolo: team.uppercased(), tag: -1, azione: #selector(azioneTeam(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "team", "strTeamBadge", "strTeam"], titolo: team.uppercased(), tag: -1, azione: #selector(azioneTeam(sender:)), stelle: [true, false])
         }
     }
     
     @IBAction func infoAzione(_ sender: Any) {
-        
+        present((storyboard?.instantiateViewController(withIdentifier: "Informazioni"))!, animated: true, completion: nil)
     }
     
     @objc func avviaTimer(sender : UIButton!){
+        bottoneSelezionato = sender
         secondi = 800
         timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(azioneTimer), userInfo: nil, repeats: true)
     }
@@ -150,7 +152,8 @@ class Sport: UIViewController {
     @objc func messaggio(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let info = UIAlertAction(title: "INFO", style: .default) { (action) in
-            
+            Dati.aggiungiSelezionatoInformazioni(tag: self.bottoneSelezionato.tag)
+            self.present((self.storyboard?.instantiateViewController(withIdentifier: "Informazioni"))!, animated: true, completion: nil)
         }
         let preferiti = UIAlertAction(title: "Aggiungi ai preferiti", style: .default) { (action) in
             
@@ -172,7 +175,7 @@ class Sport: UIViewController {
             case 1: sport = "Motorsport"; break
             default: sport = "Rugby"; break
             }
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "leghe", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: sender.tag, azione: #selector(azioneLeghe(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "leghe", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: sender.tag, azione: #selector(azioneLeghe(sender:)), stelle: [true, false])
         }
     }
     
@@ -181,7 +184,7 @@ class Sport: UIViewController {
             timer.invalidate()
             var nome = Dati.elementi(key: "strLeague")[sender.tag]
             nome = nome.replacingOccurrences(of: " ", with: "_")
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "team", "strTeamBadge", "strTeam"], titolo: Dati.elementi(key: "strLeague")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azioneTeam(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "team", "strTeamBadge", "strTeam"], titolo: Dati.elementi(key: "strLeague")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azioneTeam(sender:)), stelle: [true, false])
             
         }
     }
@@ -190,7 +193,7 @@ class Sport: UIViewController {
         if timer.isValid{
             timer.invalidate()
             let team = Dati.elementi(key: "idTeam")[sender.tag]
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id=" + team, "player", "strCutout", "strPlayer"], titolo: Dati.elementi(key: "strTeam")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azionePlayer(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id=" + team, "player", "strCutout", "strPlayer"], titolo: Dati.elementi(key: "strTeam")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azionePlayer(sender:)), stelle: [true, false])
         }
     }
     
@@ -208,7 +211,7 @@ class Sport: UIViewController {
         }
     }
     
-    func cambiaView(infomazioni : [String], titolo : String, tag : Int, azione : Selector){
+    func cambiaView(infomazioni : [String], titolo : String, tag : Int, azione : Selector, stelle : [Bool]){
         let thread  = DispatchQueue.global(qos: .background)
         thread.async {
             DispatchQueue.main.async {
@@ -227,7 +230,7 @@ class Sport: UIViewController {
                 DispatchQueue.main.async {
                     self.cancellaUIView()
                     self.contenitore.contentSize = CGSize(width: Int(self.view.frame.width), height: (200 * Dati.json.count / 2) + 84)
-                    self.crea(strTitolo: titolo, immagini: immagini, nomeTitolo: infomazioni[3], azione: azione)
+                    self.crea(strTitolo: titolo, immagini: immagini, nomeTitolo: infomazioni[3], azione: azione, stelle:  stelle)
                     self.contenitore.setContentOffset(CGPoint(x: 0, y: self.contenitore.contentInset.top), animated: true)
                 }
             }else {

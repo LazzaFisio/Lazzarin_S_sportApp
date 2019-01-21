@@ -52,12 +52,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TUTTI GLI SPORT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HEn-cn-BoE">
-                                <rect key="frame" x="108.5" y="55" width="158" height="24"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="TUTTI GLI SPORT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="163" translatesAutoresizingMaskIntoConstraints="NO" id="HEn-cn-BoE">
+                                <rect key="frame" x="97.5" y="55" width="180" height="23.5"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="HEn-cn-BoE" secondAttribute="height" multiplier="79:12" id="Rgp-ms-Ha8"/>
+                                    <constraint firstAttribute="width" constant="180" id="Snj-T2-pq9"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
@@ -118,8 +119,6 @@
                             <constraint firstItem="qjX-La-VNa" firstAttribute="leading" secondItem="lcQ-EK-DGQ" secondAttribute="trailing" constant="2" id="3Uv-3q-uMb"/>
                             <constraint firstItem="QCR-PL-3jT" firstAttribute="trailing" secondItem="qjX-La-VNa" secondAttribute="trailing" constant="8.5" id="7F9-O9-ikz"/>
                             <constraint firstItem="vWL-1V-br2" firstAttribute="leading" secondItem="QCR-PL-3jT" secondAttribute="leading" id="824-9j-KeJ"/>
-                            <constraint firstItem="HEn-cn-BoE" firstAttribute="leading" secondItem="Aqd-6b-3KO" secondAttribute="trailing" constant="36.5" id="8Gl-er-Mfx"/>
-                            <constraint firstItem="lcQ-EK-DGQ" firstAttribute="leading" secondItem="HEn-cn-BoE" secondAttribute="trailing" constant="10" id="Aq2-PQ-bSQ"/>
                             <constraint firstItem="QCR-PL-3jT" firstAttribute="trailing" secondItem="vWL-1V-br2" secondAttribute="trailing" id="Inl-aU-qai"/>
                             <constraint firstItem="mzf-Nn-MUd" firstAttribute="bottom" secondItem="QCR-PL-3jT" secondAttribute="bottom" id="JgN-Zy-J0k"/>
                             <constraint firstItem="mzf-Nn-MUd" firstAttribute="top" secondItem="qjX-La-VNa" secondAttribute="bottom" constant="19" id="KhS-9O-AuB"/>
@@ -129,7 +128,7 @@
                             <constraint firstItem="vWL-1V-br2" firstAttribute="top" secondItem="QCR-PL-3jT" secondAttribute="top" id="XKt-pN-E1F"/>
                             <constraint firstItem="Aqd-6b-3KO" firstAttribute="top" secondItem="QCR-PL-3jT" secondAttribute="top" constant="23.5" id="dlw-DV-rAe"/>
                             <constraint firstItem="SLb-dQ-LHk" firstAttribute="centerY" secondItem="Tq6-Q1-4B9" secondAttribute="centerY" id="kSt-gO-wOe"/>
-                            <constraint firstItem="HEn-cn-BoE" firstAttribute="centerX" secondItem="Tq6-Q1-4B9" secondAttribute="centerX" id="ktV-IJ-l76"/>
+                            <constraint firstItem="HEn-cn-BoE" firstAttribute="centerX" secondItem="Tq6-Q1-4B9" secondAttribute="centerX" id="lkY-Oy-G2V"/>
                             <constraint firstItem="HEn-cn-BoE" firstAttribute="top" secondItem="QCR-PL-3jT" secondAttribute="top" constant="35" id="mWI-4g-wmu"/>
                             <constraint firstItem="SLb-dQ-LHk" firstAttribute="centerX" secondItem="Tq6-Q1-4B9" secondAttribute="centerX" id="q8u-ig-MHN"/>
                             <constraint firstItem="mzf-Nn-MUd" firstAttribute="top" secondItem="lcQ-EK-DGQ" secondAttribute="bottom" constant="15" id="ugW-Aj-rvF"/>
@@ -156,13 +155,13 @@
         <!--Informazioni-->
         <scene sceneID="lvK-9Q-E7b">
             <objects>
-                <viewController id="DPL-Na-aba" customClass="Informazioni" customModule="Lazzarin_S_sportApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Informazioni" id="DPL-Na-aba" customClass="Informazioni" customModule="Lazzarin_S_sportApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6o6-xv-qLE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cqf-rL-fsF">
-                                <rect key="frame" x="24" y="55" width="54.5" height="48"/>
+                                <rect key="frame" x="24" y="55" width="48" height="48"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" backgroundImage="back.png"/>
                                 <connections>
@@ -182,7 +181,6 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.98106676339999999" blue="0.57369142770000003" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="7X8-c4-cVB" firstAttribute="leading" secondItem="Cqf-rL-fsF" secondAttribute="trailing" constant="30" id="QSv-hA-Jj7"/>
                             <constraint firstItem="Cqf-rL-fsF" firstAttribute="top" secondItem="lqT-Oi-EEY" secondAttribute="top" constant="35" id="V6r-hp-yws"/>
                             <constraint firstItem="7X8-c4-cVB" firstAttribute="centerY" secondItem="Cqf-rL-fsF" secondAttribute="centerY" id="X6n-JQ-KiM"/>
                             <constraint firstItem="Cqf-rL-fsF" firstAttribute="leading" secondItem="lqT-Oi-EEY" secondAttribute="leading" constant="24" id="dye-DK-Wy5"/>
