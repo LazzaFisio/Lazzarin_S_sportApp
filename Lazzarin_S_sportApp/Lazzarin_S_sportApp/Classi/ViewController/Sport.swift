@@ -137,7 +137,7 @@ class Sport: UIViewController {
     
     @objc func avviaTimer(sender : UIButton!){
         bottoneSelezionato = sender
-        secondi = 800
+        secondi = 500
         timer = Timer.scheduledTimer(timeInterval: 0.001, target: self, selector: #selector(azioneTimer), userInfo: nil, repeats: true)
     }
     
@@ -151,7 +151,7 @@ class Sport: UIViewController {
     
     @objc func messaggio(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let info = UIAlertAction(title: "INFO", style: .default) { (action) in
+        let info = UIAlertAction(title: "Info", style: .default) { (action) in
             Dati.aggiungiSelezionatoInformazioni(tag: self.bottoneSelezionato.tag)
             self.present((self.storyboard?.instantiateViewController(withIdentifier: "Informazioni"))!, animated: true, completion: nil)
         }
@@ -160,7 +160,8 @@ class Sport: UIViewController {
         }
         let cancella = UIAlertAction(title: "Annulla", style: .destructive, handler: nil)
         alert.addAction(info)
-        if titolo.text != "TUTTI GLI SPORT"{
+        
+        if titolo.text != "TUTTI GLI SPORT", Dati.selezionato.value(forKey: "idTeam") as? String ?? "" == ""{
             alert.addAction(preferiti)
         }
         alert.addAction(cancella)

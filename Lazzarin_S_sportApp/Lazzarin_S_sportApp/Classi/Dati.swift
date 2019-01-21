@@ -15,8 +15,13 @@ class Dati{
     static var ricerca : String = ""
     static var condizione : Bool = false
     static var json : Array<NSDictionary> = []
+    static var preferiti : Array<NSDictionary> = caricaPreferiti()
     static var selezionato = NSDictionary()
     static var informazioni = NSDictionary()
+    
+    //---------------------------------------------------------------
+    //                     Gestione json
+    //---------------------------------------------------------------
     
     public static func caricaJson(query : String, ricerca : String){
         self.ricerca = ricerca
@@ -105,5 +110,32 @@ class Dati{
         view.addSubview(label)
         view.addSubview(immagine)
         return view
+    }
+    
+    //---------------------------------------------------------------
+    //                     Gestione preferiti
+    //---------------------------------------------------------------
+    
+    private static func caricaPreferiti() -> Array<NSDictionary> {
+        var appoggio = Array<NSDictionary>()
+        let cercare = ["numLegue", "numTeam"]
+        let nomi = ["Legue", "Team"]
+        for i in 0...cercare.count - 1{
+            let daAggiungere = NSDictionary()
+            daAggiungere.setValue(nomi[i], forKey: "nome")
+            let dimensione = UserDefaults.value(forKey: cercare[i]) as? Int ?? 0
+            for y in 1...dimensione{
+                let inserire = String(y) + nomi[i]
+                daAggiungere.setValue(UserDefaults.value(forKey: inserire), forKey: inserire)
+            }
+            appoggio.append(daAggiungere)
+        }
+        return appoggio
+    }
+    
+    public static func aggiungiPreferiti(valore : String, opzione: String) {
+        var dimensione = UserDefaults.value(forKey: "num" + opzione) as! Int
+        dimensione += 1
+        
     }
 }
