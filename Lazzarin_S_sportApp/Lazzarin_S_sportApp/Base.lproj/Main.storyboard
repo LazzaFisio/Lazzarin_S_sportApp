@@ -182,7 +182,6 @@
                                 <state key="normal" backgroundImage="back.png"/>
                                 <connections>
                                     <action selector="back:" destination="DPL-Na-aba" eventType="touchUpInside" id="6J3-FL-Ywv"/>
-                                    <action selector="indietro:" destination="Id4-Mi-RkS" eventType="touchUpInside" id="eeQ-j7-eWk"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="INFORMAZIONI" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7X8-c4-cVB">
@@ -220,8 +219,6 @@
                                 <state key="normal" backgroundImage="stellaVuota.png"/>
                                 <connections>
                                     <action selector="azionePreferiti:" destination="DPL-Na-aba" eventType="touchUpInside" id="9Pg-9W-TB1"/>
-                                    <action selector="back:" destination="DPL-Na-aba" eventType="touchUpInside" id="1yK-hI-3WK"/>
-                                    <action selector="indietro:" destination="Id4-Mi-RkS" eventType="touchUpInside" id="osb-6T-eif"/>
                                 </connections>
                             </button>
                         </subviews>

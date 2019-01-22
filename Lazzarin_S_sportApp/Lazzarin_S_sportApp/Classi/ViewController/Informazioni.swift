@@ -47,18 +47,24 @@ class Informazioni: UIViewController {
     @IBAction func azionePreferiti(_ sender: Any) {
         let bottone = sender as! UIButton
         switch bottone.tag{
-            case 1: cambiaPreferito(valore: dizionario.value(forKey: "idLeague") as! String, opzione: "League", cancella: false); break
-            default: cambiaPreferito(valore: dizionario.value(forKey: "idLeague") as! String, opzione: "League", cancella: true); break
+            case 1: cambiaPreferito(valore: dizionario.value(forKey: "idLeague") as! String, opzione: "League", cancella: false, tag: 1); break
+            default: cambiaPreferito(valore: dizionario.value(forKey: "idLeague") as! String, opzione: "League", cancella: true, tag: 0); break
         }
     }
     
-    func cambiaPreferito(valore : String, opzione : String, cancella : Bool){
+    func cambiaPreferito(valore : String, opzione : String, cancella : Bool, tag : Int){
         if cancella{
             Dati.cancellaPreferiti(valore: valore, opzione: opzione)
-            logo.image = UIImage(named: "stellaVuota.png")
+            preferiti.setBackgroundImage(UIImage(named: "stellaVuota.png"), for: .normal)
+            if tag == 0{
+                preferiti.tag = 1
+            }
         }else{
             Dati.aggiungiPreferiti(valore: valore, opzione: opzione)
-            logo.image = UIImage(named: "stellaPiena.png")
+            preferiti.setBackgroundImage(UIImage(named: "stellaPiena.png"), for: .normal)
+            if tag == 1{
+                preferiti.tag = 0
+            }
         }
     }
     

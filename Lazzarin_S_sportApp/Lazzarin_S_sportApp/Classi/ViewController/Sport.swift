@@ -30,13 +30,10 @@ class Sport: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if contenitore.subviews.count == 0{
-             creaSport()
-        }
+        creaSport()
         attesa.isHidden = true
         //let domain = Bundle.main.bundleIdentifier!
         //UserDefaults.standard.removePersistentDomain(forName: domain)
-        // Do any additional setup after loading the view.
     }
     
     func creaSport(){
@@ -136,11 +133,11 @@ class Sport: UIViewController {
             creaSport()
         }else if Dati.ricerca == "Team"{
             let sport = Dati.selezionato.value(forKey: "strSport") as! String
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "League", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: -1, azione: #selector(azioneLeghe(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "League", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: -1, azione: #selector(azioneLeghe(sender:)), preferiti: false)
         }else{
             let team = Dati.selezionato.value(forKey: "strLeague") as! String
             let nome = team.replacingOccurrences(of: " ", with: "_")
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "Team", "strTeamBadge", "strTeam"], titolo: team.uppercased(), tag: -1, azione: #selector(azioneTeam(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "Team", "strTeamBadge", "strTeam"], titolo: team.uppercased(), tag: -1, azione: #selector(azioneTeam(sender:)), preferiti: false)
         }
     }
     
@@ -206,7 +203,7 @@ class Sport: UIViewController {
             informazioni = ["", "", "strTeamBadge", "strTeam"]
             azione = #selector(azioneTeam(sender:))
         }
-        cambiaView(infomazioni: informazioni, titolo: titolo.text!, tag: -1, azione: azione)
+        cambiaView(infomazioni: informazioni, titolo: titolo.text!, tag: -1, azione: azione, preferiti: true)
     }
     
     @objc func azioneSport(sender : UIButton!){
@@ -217,7 +214,7 @@ class Sport: UIViewController {
             case 1: sport = "Motorsport"; break
             default: sport = "Rugby"; break
             }
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "League", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: sender.tag, azione: #selector(azioneLeghe(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "League", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: sender.tag, azione: #selector(azioneLeghe(sender:)), preferiti: false)
         }
     }
     
@@ -226,7 +223,7 @@ class Sport: UIViewController {
             timer.invalidate()
             var nome = Dati.elementi(key: "strLeague")[sender.tag]
             nome = nome.replacingOccurrences(of: " ", with: "_")
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "Team", "strTeamBadge", "strTeam"], titolo: Dati.elementi(key: "strLeague")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azioneTeam(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "Team", "strTeamBadge", "strTeam"], titolo: Dati.elementi(key: "strLeague")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azioneTeam(sender:)), preferiti: false)
             
         }
     }
@@ -235,7 +232,7 @@ class Sport: UIViewController {
         if timer.isValid{
             timer.invalidate()
             let team = Dati.elementi(key: "idTeam")[sender.tag]
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id=" + team, "Player", "strCutout", "strPlayer"], titolo: Dati.elementi(key: "strTeam")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azionePlayer(sender:)))
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id=" + team, "Player", "strCutout", "strPlayer"], titolo: Dati.elementi(key: "strTeam")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azionePlayer(sender:)), preferiti: false)
         }
     }
     
@@ -253,7 +250,7 @@ class Sport: UIViewController {
         }
     }
     
-    func cambiaView(infomazioni : [String], titolo : String, tag : Int, azione : Selector){
+    func cambiaView(infomazioni : [String], titolo : String, tag : Int, azione : Selector, preferiti : Bool){
         let thread  = DispatchQueue.global(qos: .background)
         thread.async {
             DispatchQueue.main.async {
@@ -275,7 +272,9 @@ class Sport: UIViewController {
                     self.cancellaUIView()
                     self.contenitore.contentSize = CGSize(width: Int(self.view.frame.width), height: (200 * Dati.json.count / 2) + 84)
                     self.crea(strTitolo: titolo, immagini: immagini, nomeTitolo: infomazioni[3], azione: azione)
-                    self.contenitore.setContentOffset(CGPoint(x: 0, y: self.contenitore.contentInset.top), animated: true)
+                    if !preferiti{
+                        self.contenitore.setContentOffset(CGPoint(x: 0, y: self.contenitore.contentInset.top), animated: true)
+                    }
                 }
             }else {
                 DispatchQueue.main.async {
@@ -295,7 +294,7 @@ class Sport: UIViewController {
     func controllaView(){
         let thread = DispatchQueue.global(qos: .background)
         thread.async {
-            while !viewInfo.isBeingDismissed{}
+            while !self.viewInfo.isBeingDismissed{}
             DispatchQueue.main.async {
                 self.aggiornaStelle()
             }
