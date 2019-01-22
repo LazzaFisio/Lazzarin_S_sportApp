@@ -15,7 +15,7 @@ class Dati{
     static var ricerca : String = ""
     static var condizione : Bool = false
     static var json : Array<NSDictionary> = []
-    static var preferiti : Array<NSDictionary> = caricaPreferiti()
+    static var preferiti : Array<NSMutableDictionary> = caricaPreferiti()
     static var selezionato = NSDictionary()
     static var informazioni = NSDictionary()
     
@@ -116,17 +116,20 @@ class Dati{
     //                     Gestione preferiti
     //---------------------------------------------------------------
     
-    private static func caricaPreferiti() -> Array<NSDictionary> {
-        var appoggio = Array<NSDictionary>()
-        let cercare = ["numLegue", "numTeam"]
-        let nomi = ["Legue", "Team"]
+    private static func caricaPreferiti() -> Array<NSMutableDictionary> {
+        var appoggio = Array<NSMutableDictionary>()
+        let cercare = ["numLeague", "numTeam"]
+        let nomi = ["League", "Team"]
         for i in 0...cercare.count - 1{
-            let daAggiungere = NSDictionary()
+            let daAggiungere = NSMutableDictionary()
             daAggiungere.setValue(nomi[i], forKey: "nome")
-            let dimensione = UserDefaults.value(forKey: cercare[i]) as? Int ?? 0
-            for y in 1...dimensione{
-                let inserire = String(y) + nomi[i]
-                daAggiungere.setValue(UserDefaults.value(forKey: inserire), forKey: inserire)
+            let dimensione = UserDefaults.standard.value(forKey: cercare[i]) as? Int ?? 0
+            daAggiungere.setValue(dimensione, forKey: "dimensione")
+            if dimensione > 0{
+                for y in 1...dimensione{
+                    let inserire = String(y) + nomi[i]
+                    daAggiungere.setValue(UserDefaults.standard.value(forKey: inserire), forKey: inserire)
+                }
             }
             appoggio.append(daAggiungere)
         }
@@ -134,8 +137,71 @@ class Dati{
     }
     
     public static func aggiungiPreferiti(valore : String, opzione: String) {
-        var dimensione = UserDefaults.value(forKey: "num" + opzione) as! Int
-        dimensione += 1
-        
+        for item in preferiti{
+            if item.value(forKey: "nome") as! String == opzione{
+                var dimensione = item.value(forKey: "dimensione") as! Int
+                dimensione += 1
+                item.setValue(valore, forKey: String(dimensione) + (item.value(forKey: "nome") as! String))
+                item.setValue(dimensione, forKey: "dimensione")
+            }
+        }
+        salvaPreferiti()
+    }
+    
+    public static func cancellaPreferiti(valore : String, opzione : String){
+        for item in preferiti{
+            if item.value(forKey: "nome") as! String == opzione{
+                var dimensione = item.value(forKey: "dimensione") as! Int
+                var dizionario : [String] = []
+                for i in 1...dimensione{
+                    UserDefaults.standard.removeObject(forKey: String(i) + opzione)
+                    let appoggio = item.value(forKey: String(i) + opzione) as! String
+                    if appoggio != valore{
+                        dizionario.append(appoggio)
+                    }
+                    item.removeObject(forKey: appoggio)
+                }
+                dimensione -= 1
+                if dimensione > 0{
+                    for i in 1...dimensione{
+                        item.setValue(dizionario[i - 1], forKey: String(i) + opzione)
+                    }
+                }
+                item.setValue(dimensione, forKey: "dimensione")
+            }
+        }
+        salvaPreferiti()
+    }
+    
+    public static func preferito(valore : String, opzione : String) -> Bool{
+        for item in preferiti{
+            if item.value(forKey: "nome") as! String == opzione{
+                let dimensione = item.value(forKey: "dimensione") as! Int
+                if dimensione > 0{
+                    for i in 1...dimensione{
+                        if item.value(forKey: String(i) + opzione) as! String == valore{
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    private static func salvaPreferiti(){
+        for item in preferiti{
+            let nome = item.value(forKey: "nome") as! String
+            UserDefaults.standard.removeObject(forKey: "num" + nome)
+            UserDefaults.standard.setValue(item.value(forKey: "dimensione"), forKey: "num" + nome)
+            let dimensione = item.value(forKey: "dimensione") as! Int
+            if dimensione > 0{
+                for i in 1...dimensione{
+                    let inserire = String(i) + nome
+                    UserDefaults.standard.removeObject(forKey: inserire)
+                    UserDefaults.standard.setValue(item.value(forKey: inserire), forKey: inserire)
+                }
+            }
+        }
     }
 }

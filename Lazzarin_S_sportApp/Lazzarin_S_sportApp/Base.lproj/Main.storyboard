@@ -44,6 +44,22 @@
             </objects>
             <point key="canvasLocation" x="529" y="1184"/>
         </scene>
+        <!--Impostazioni-->
+        <scene sceneID="6Ok-cf-zU7">
+            <objects>
+                <viewController id="U6a-Xh-EWJ" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5yV-8K-hAo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.0" green="0.98106676339999999" blue="0.57369142770000003" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="OFr-0D-99S"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Impostazioni" image="settingIco.png" id="lWm-RI-Klf"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kUn-QW-sEw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="529" y="1859"/>
+        </scene>
         <!--Sport-->
         <scene sceneID="SqS-AQ-kns">
             <objects>
@@ -206,11 +222,12 @@
                         <segue destination="Id4-Mi-RkS" kind="relationship" relationship="viewControllers" id="YDd-Hw-4BN"/>
                         <segue destination="0n8-Te-2LL" kind="relationship" relationship="viewControllers" id="mD6-iV-yLL"/>
                         <segue destination="gmg-9f-Kfk" kind="relationship" relationship="viewControllers" id="0pf-dF-Cp2"/>
+                        <segue destination="U6a-Xh-EWJ" kind="relationship" relationship="viewControllers" id="59p-Df-jGb"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="di5-7C-2hU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-577" y="432"/>
+            <point key="canvasLocation" x="-882" y="845"/>
         </scene>
     </scenes>
     <resources>
@@ -220,6 +237,7 @@
         <image name="info.png" width="48" height="48"/>
         <image name="loader.png" width="60" height="60"/>
         <image name="search.png" width="40" height="40"/>
+        <image name="settingIco.png" width="30" height="30"/>
         <image name="stellaIco.png" width="30" height="30"/>
     </resources>
 </document>

@@ -28,6 +28,7 @@
 		F74991C521EF29C500BAB175 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F74991C321EF29C500BAB175 /* LaunchScreen.storyboard */; };
 		F74991D021EF29C500BAB175 /* Lazzarin_S_sportAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74991CF21EF29C500BAB175 /* Lazzarin_S_sportAppTests.swift */; };
 		F74991DB21EF29C500BAB175 /* Lazzarin_S_sportAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74991DA21EF29C500BAB175 /* Lazzarin_S_sportAppUITests.swift */; };
+		F7755B0521F718A200881DA8 /* settingIco.png in Resources */ = {isa = PBXBuildFile; fileRef = F7755B0421F718A200881DA8 /* settingIco.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		F74991D621EF29C500BAB175 /* Lazzarin_S_sportAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Lazzarin_S_sportAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F74991DA21EF29C500BAB175 /* Lazzarin_S_sportAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lazzarin_S_sportAppUITests.swift; sourceTree = "<group>"; };
 		F74991DC21EF29C500BAB175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F7755B0421F718A200881DA8 /* settingIco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingIco.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 		F71EB2C221F09AA2009810B9 /* Icone */ = {
 			isa = PBXGroup;
 			children = (
+				F7755B0421F718A200881DA8 /* settingIco.png */,
 				F71EB2C921F09C2D009810B9 /* campoIco.png */,
 				F71EB2C421F09ABB009810B9 /* calcioIco.png */,
 				F71EB2C721F09AD2009810B9 /* stellaIco.png */,
@@ -312,6 +315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F71EB2D621F32862009810B9 /* search.png in Resources */,
+				F7755B0521F718A200881DA8 /* settingIco.png in Resources */,
 				F71EB2B821EF2E38009810B9 /* motorsport.png in Resources */,
 				F71EB2B721EF2E38009810B9 /* rugby.png in Resources */,
 				F71EB2CA21F09C2E009810B9 /* campoIco.png in Resources */,

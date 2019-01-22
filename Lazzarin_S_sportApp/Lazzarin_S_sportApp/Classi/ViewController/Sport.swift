@@ -31,6 +31,8 @@ class Sport: UIViewController {
         super.viewDidLoad()
         creaSport()
         attesa.isHidden = true
+        //let domain = Bundle.main.bundleIdentifier!
+        //UserDefaults.standard.removePersistentDomain(forName: domain)
         // Do any additional setup after loading the view.
     }
     
@@ -54,12 +56,16 @@ class Sport: UIViewController {
         cerca.isHidden = true
     }
     
-    func crea(strTitolo : String, immagini : [UIImage], nomeTitolo : String, azione : Selector, stelle : [Bool]){
+    func crea(strTitolo : String, immagini : [UIImage], nomeTitolo : String, azione : Selector){
         var i = 0
         var height = 0
         var view = UIView()
+        var stelle : [Bool] = []
         while i < Dati.json.count{
             var testo = Dati.elementi(key: nomeTitolo)[i]
+            if Dati.preferito(valore: Dati.elementi(key: "id" + Dati.ricerca)[i], opzione: Dati.ricerca){
+                stelle = [true, true]
+            }else{ stelle = [false]}
             var dimensioni = arrayDimensioni(view: CGRect(x: 30, y: height, width: 148, height: 168), testo: testo, stella: stelle[0])
             view = Dati.creaView(dimensioni: dimensioni, imm: immagini[i], testo: testo, stella: stelle, tag: i)
             aggiungiAzione(azione: azione, view: view)
@@ -67,6 +73,9 @@ class Sport: UIViewController {
             i += 1
             if i < Dati.json.count{
                 testo = Dati.elementi(key: nomeTitolo)[i]
+                if Dati.preferito(valore: Dati.elementi(key: "id" + Dati.ricerca)[i], opzione: Dati.ricerca){
+                    stelle = [true, true]
+                }else{ stelle = [false]}
                 dimensioni = arrayDimensioni(view: CGRect(x: Int(self.view.frame.width) - (30 + 148), y: height, width: 148, height: 168), testo: testo, stella: stelle[0])
                 view = Dati.creaView(dimensioni: dimensioni, imm: immagini[i], testo: Dati.elementi(key: nomeTitolo)[i], stella: stelle, tag: i)
                 aggiungiAzione(azione: azione, view: view)
@@ -117,17 +126,17 @@ class Sport: UIViewController {
     
     @IBAction func indietro(_ sender: Any) {
         errore.isHidden = true
-        if Dati.ricerca == "leghe"{
+        if Dati.ricerca == "League"{
             cancellaUIView()
             contenitore.contentSize = CGSize(width: view.frame.width, height: view.frame.height - 104)
             creaSport()
-        }else if Dati.ricerca == "team"{
+        }else if Dati.ricerca == "Team"{
             let sport = Dati.selezionato.value(forKey: "strSport") as! String
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "leghe", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: -1, azione: #selector(azioneLeghe(sender:)), stelle: [true, false])
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "League", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: -1, azione: #selector(azioneLeghe(sender:)))
         }else{
             let team = Dati.selezionato.value(forKey: "strLeague") as! String
             let nome = team.replacingOccurrences(of: " ", with: "_")
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "team", "strTeamBadge", "strTeam"], titolo: team.uppercased(), tag: -1, azione: #selector(azioneTeam(sender:)), stelle: [true, false])
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "Team", "strTeamBadge", "strTeam"], titolo: team.uppercased(), tag: -1, azione: #selector(azioneTeam(sender:)))
         }
     }
     
@@ -156,16 +165,40 @@ class Sport: UIViewController {
             self.present((self.storyboard?.instantiateViewController(withIdentifier: "Informazioni"))!, animated: true, completion: nil)
         }
         let preferiti = UIAlertAction(title: "Aggiungi ai preferiti", style: .default) { (action) in
-            
+            Dati.aggiungiSelezionatoInformazioni(tag: self.bottoneSelezionato.tag)
+            Dati.aggiungiPreferiti(valore: Dati.informazioni.value(forKey: "id" + Dati.ricerca) as! String, opzione: Dati.ricerca)
+            self.aggiornaStelle()
+        }
+        let noPreferiti = UIAlertAction(title: "Rimuovi dai preferiti", style: .default) { (action) in
+            Dati.aggiungiSelezionatoInformazioni(tag: self.bottoneSelezionato.tag)
+            Dati.cancellaPreferiti(valore: Dati.informazioni.value(forKey: "id" + Dati.ricerca) as! String, opzione: Dati.ricerca)
+            self.aggiornaStelle()
         }
         let cancella = UIAlertAction(title: "Annulla", style: .destructive, handler: nil)
         alert.addAction(info)
-        
         if titolo.text != "TUTTI GLI SPORT", Dati.selezionato.value(forKey: "idTeam") as? String ?? "" == ""{
-            alert.addAction(preferiti)
+            let controlla = Dati.elementi(key: "id" + Dati.ricerca)[self.bottoneSelezionato.tag]
+            if Dati.preferito(valore: controlla, opzione: Dati.ricerca){
+                alert.addAction(noPreferiti)
+            }else{
+                alert.addAction(preferiti)
+            }
         }
         alert.addAction(cancella)
         present(alert, animated: true, completion: nil)
+    }
+    
+    func aggiornaStelle(){
+        var informazioni : [String] = []
+        var azione = #selector(azioneLeghe(sender:))
+        if Dati.ricerca == "League"{
+            informazioni = ["", "", "strBadge", "strLeague"]
+            azione = #selector(azioneLeghe(sender:))
+        }else{
+            informazioni = ["", "", "strTeamBadge", "strTeam"]
+            azione = #selector(azioneTeam(sender:))
+        }
+        cambiaView(infomazioni: informazioni, titolo: titolo.text!, tag: -1, azione: azione)
     }
     
     @objc func azioneSport(sender : UIButton!){
@@ -176,7 +209,7 @@ class Sport: UIViewController {
             case 1: sport = "Motorsport"; break
             default: sport = "Rugby"; break
             }
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "leghe", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: sender.tag, azione: #selector(azioneLeghe(sender:)), stelle: [true, false])
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, "League", "strBadge", "strLeague"], titolo: sport.uppercased(), tag: sender.tag, azione: #selector(azioneLeghe(sender:)))
         }
     }
     
@@ -185,7 +218,7 @@ class Sport: UIViewController {
             timer.invalidate()
             var nome = Dati.elementi(key: "strLeague")[sender.tag]
             nome = nome.replacingOccurrences(of: " ", with: "_")
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "team", "strTeamBadge", "strTeam"], titolo: Dati.elementi(key: "strLeague")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azioneTeam(sender:)), stelle: [true, false])
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, "Team", "strTeamBadge", "strTeam"], titolo: Dati.elementi(key: "strLeague")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azioneTeam(sender:)))
             
         }
     }
@@ -194,7 +227,7 @@ class Sport: UIViewController {
         if timer.isValid{
             timer.invalidate()
             let team = Dati.elementi(key: "idTeam")[sender.tag]
-            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id=" + team, "player", "strCutout", "strPlayer"], titolo: Dati.elementi(key: "strTeam")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azionePlayer(sender:)), stelle: [true, false])
+            cambiaView(infomazioni: ["https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id=" + team, "Player", "strCutout", "strPlayer"], titolo: Dati.elementi(key: "strTeam")[sender.tag].uppercased(), tag: sender.tag, azione: #selector(azionePlayer(sender:)))
         }
     }
     
@@ -212,7 +245,7 @@ class Sport: UIViewController {
         }
     }
     
-    func cambiaView(infomazioni : [String], titolo : String, tag : Int, azione : Selector, stelle : [Bool]){
+    func cambiaView(infomazioni : [String], titolo : String, tag : Int, azione : Selector){
         let thread  = DispatchQueue.global(qos: .background)
         thread.async {
             DispatchQueue.main.async {
@@ -222,7 +255,9 @@ class Sport: UIViewController {
             if tag != -1 && Dati.json.count > 0{
                 Dati.aggiungiSelezionato(tag: tag)
             }
-            Dati.caricaJson(query: infomazioni[0], ricerca: infomazioni[1])
+            if infomazioni[0] != ""{
+                Dati.caricaJson(query: infomazioni[0], ricerca: infomazioni[1])
+            }
             if Dati.json.count > 0{
                 var immagini : [UIImage] = []
                 for i in 0...Dati.json.count - 1{
@@ -231,7 +266,7 @@ class Sport: UIViewController {
                 DispatchQueue.main.async {
                     self.cancellaUIView()
                     self.contenitore.contentSize = CGSize(width: Int(self.view.frame.width), height: (200 * Dati.json.count / 2) + 84)
-                    self.crea(strTitolo: titolo, immagini: immagini, nomeTitolo: infomazioni[3], azione: azione, stelle:  stelle)
+                    self.crea(strTitolo: titolo, immagini: immagini, nomeTitolo: infomazioni[3], azione: azione)
                     self.contenitore.setContentOffset(CGPoint(x: 0, y: self.contenitore.contentInset.top), animated: true)
                 }
             }else {
