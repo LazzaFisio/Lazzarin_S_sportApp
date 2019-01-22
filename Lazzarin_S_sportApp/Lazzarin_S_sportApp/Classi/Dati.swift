@@ -116,7 +116,7 @@ class Dati{
     //                     Gestione preferiti
     //---------------------------------------------------------------
     
-    private static func caricaPreferiti() -> Array<NSMutableDictionary> {
+    @objc private static func caricaPreferiti() -> Array<NSMutableDictionary> {
         var appoggio = Array<NSMutableDictionary>()
         let cercare = ["numLeague", "numTeam"]
         let nomi = ["League", "Team"]

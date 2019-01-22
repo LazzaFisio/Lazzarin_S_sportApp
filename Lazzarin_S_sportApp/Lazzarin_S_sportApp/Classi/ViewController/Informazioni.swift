@@ -10,13 +10,89 @@ import UIKit
 
 class Informazioni: UIViewController {
 
+    @IBOutlet weak var logo: UIImageView!
+    
+    @IBOutlet weak var titolo: UILabel!
+    
+    @IBOutlet weak var preferiti: UIButton!
+    
+    var dizionario = NSDictionary()
+    var timer = Timer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        if Dati.informazioni.count == 0{
+            dizionario = Dati.selezionato
+            switch Dati.ricerca{
+                case "Team": caricaInfoLeague(); break
+                case "Player": caricaInfoTeam(); break
+                default: caricaInfoSport(); break
+            }
+        }else{
+            dizionario = Dati.informazioni
+            switch Dati.ricerca{
+                case "League": caricaInfoLeague(); break
+                case "Team": caricaInfoTeam(); break
+                case "Player": caricaInfoPlayer(); break
+                default: caricaInfoSport(); break
+            }
+        }
+        
     }
 
     @IBAction func back(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func azionePreferiti(_ sender: Any) {
+        let bottone = sender as! UIButton
+        switch bottone.tag{
+            case 1: cambiaPreferito(valore: dizionario.value(forKey: "idLeague") as! String, opzione: "League", cancella: false); break
+            default: cambiaPreferito(valore: dizionario.value(forKey: "idLeague") as! String, opzione: "League", cancella: true); break
+        }
+    }
+    
+    func cambiaPreferito(valore : String, opzione : String, cancella : Bool){
+        if cancella{
+            Dati.cancellaPreferiti(valore: valore, opzione: opzione)
+            logo.image = UIImage(named: "stellaVuota.png")
+        }else{
+            Dati.aggiungiPreferiti(valore: valore, opzione: opzione)
+            logo.image = UIImage(named: "stellaPiena.png")
+        }
+    }
+    
+    func caricaInfoSport(){
+        preferiti.isHidden = true
+        switch dizionario.value(forKey: "strSport") as! String{
+        case "Rugby":
+            logo.image = UIImage(named: "rugby.png")
+            titolo.text = "Rugby"
+            break
+        default:
+            logo.image = UIImage(named: "motorsport.png")
+            titolo.text = "Motorsport"
+            break
+        }
+    }
+    
+    func caricaInfoLeague(){
+        logo.image = Dati.immagine(stringa: dizionario.value(forKey: "strBadge") as! String)
+        titolo.text = dizionario.value(forKey: "strLeague") as? String ?? ""
+        if Dati.preferito(valore: dizionario.value(forKey: "idLeague") as! String, opzione: "League"){
+            preferiti.setBackgroundImage(UIImage(named: "stellaPiena.png"), for: .normal)
+            preferiti.tag = 0
+        }else{
+            preferiti.setBackgroundImage(UIImage(named: "stellaVuota.png"), for: .normal)
+            preferiti.tag = 1
+        }
+    }
+    
+    func caricaInfoTeam(){
+        
+    }
+    
+    func caricaInfoPlayer(){
+        preferiti.isHidden = true
     }
 }

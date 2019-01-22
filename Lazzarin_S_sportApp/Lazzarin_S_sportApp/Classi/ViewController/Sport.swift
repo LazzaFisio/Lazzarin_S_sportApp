@@ -26,10 +26,13 @@ class Sport: UIViewController {
     var timer = Timer()
     var secondi = 0
     var bottoneSelezionato = UIButton()
+    var viewInfo = UIViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        creaSport()
+        if contenitore.subviews.count == 0{
+             creaSport()
+        }
         attesa.isHidden = true
         //let domain = Bundle.main.bundleIdentifier!
         //UserDefaults.standard.removePersistentDomain(forName: domain)
@@ -37,11 +40,12 @@ class Sport: UIViewController {
     }
     
     func creaSport(){
+        Dati.caricaJson(query: "https://www.thesportsdb.com/api/v1/json/1/all_sports.php", ricerca: "")
         var view = UIView()
         contenitore.contentSize = CGSize(width: view.frame.width, height: view.frame.height - 104)
         var dimensioni = arrayDimensioni(view: CGRect(x: 30, y: Int(contenitore.frame.height / 2) - 84, width: 148, height: 168), testo: "rugby", stella: false)
         var immagine = UIImage(named: "rugby.png")
-        view = Dati.creaView(dimensioni: dimensioni, imm: immagine!, testo: "Rugby", stella: [false], tag: 0)
+        view = Dati.creaView(dimensioni: dimensioni, imm: immagine!, testo: "Rugby", stella: [false], tag: 8)
         aggiungiAzione(azione: #selector(azioneSport(sender:)), view: view)
         contenitore.addSubview(view)
         dimensioni = arrayDimensioni(view: CGRect(x: Int(self.view.frame.width) - (30 + 148), y: Int(contenitore.frame.height / 2) - 84, width: 148, height: 168), testo: "rugby", stella: false)
@@ -141,7 +145,9 @@ class Sport: UIViewController {
     }
     
     @IBAction func infoAzione(_ sender: Any) {
-        present((storyboard?.instantiateViewController(withIdentifier: "Informazioni"))!, animated: true, completion: nil)
+        viewInfo = (storyboard?.instantiateViewController(withIdentifier: "Informazioni"))!
+        controllaView()
+        present(viewInfo, animated: true, completion: nil)
     }
     
     @objc func avviaTimer(sender : UIButton!){
@@ -162,7 +168,9 @@ class Sport: UIViewController {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let info = UIAlertAction(title: "Info", style: .default) { (action) in
             Dati.aggiungiSelezionatoInformazioni(tag: self.bottoneSelezionato.tag)
-            self.present((self.storyboard?.instantiateViewController(withIdentifier: "Informazioni"))!, animated: true, completion: nil)
+            self.viewInfo = (self.storyboard?.instantiateViewController(withIdentifier: "Informazioni"))!
+            self.controllaView()
+            self.present(self.viewInfo, animated: true, completion: nil)
         }
         let preferiti = UIAlertAction(title: "Aggiungi ai preferiti", style: .default) { (action) in
             Dati.aggiungiSelezionatoInformazioni(tag: self.bottoneSelezionato.tag)
@@ -188,7 +196,7 @@ class Sport: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func aggiornaStelle(){
+    @objc func aggiornaStelle(){
         var informazioni : [String] = []
         var azione = #selector(azioneLeghe(sender:))
         if Dati.ricerca == "League"{
@@ -280,6 +288,16 @@ class Sport: UIViewController {
             }
             DispatchQueue.main.async {
                 self.attesa.isHidden = true
+            }
+        }
+    }
+    
+    func controllaView(){
+        let thread = DispatchQueue.global(qos: .background)
+        thread.async {
+            while !viewInfo.isBeingDismissed{}
+            DispatchQueue.main.async {
+                self.aggiornaStelle()
             }
         }
     }

@@ -24,7 +24,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T61-Eq-Ifv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="529" y="431"/>
+            <point key="canvasLocation" x="-1134" y="620"/>
         </scene>
         <!--Live-->
         <scene sceneID="bHD-fx-Wet">
@@ -42,7 +42,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DPK-MS-qKN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="529" y="1184"/>
+            <point key="canvasLocation" x="-207" y="620"/>
         </scene>
         <!--Impostazioni-->
         <scene sceneID="6Ok-cf-zU7">
@@ -58,7 +58,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kUn-QW-sEw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="529" y="1859"/>
+            <point key="canvasLocation" x="529" y="621"/>
         </scene>
         <!--Sport-->
         <scene sceneID="SqS-AQ-kns">
@@ -166,7 +166,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="efk-ek-8P3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="528.79999999999995" y="-232.53373313343329"/>
+            <point key="canvasLocation" x="-2014" y="621"/>
         </scene>
         <!--Informazioni-->
         <scene sceneID="lvK-9Q-E7b">
@@ -194,20 +194,81 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DUf-Fy-gQJ">
+                                <rect key="frame" x="50" y="123" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="2an-fA-oJa"/>
+                                    <constraint firstAttribute="height" constant="80" id="MiJ-dE-W22"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dmZ-RN-vij">
+                                <rect key="frame" x="145" y="123" width="190" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="5cS-6W-lwA"/>
+                                    <constraint firstAttribute="width" constant="190" id="fyl-aU-PHI"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cvz-SK-wAL">
+                                <rect key="frame" x="0.0" y="233" width="375" height="434"/>
+                            </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jFt-Us-8iJ">
+                                <rect key="frame" x="300" y="55" width="48" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" backgroundImage="stellaVuota.png"/>
+                                <connections>
+                                    <action selector="azionePreferiti:" destination="DPL-Na-aba" eventType="touchUpInside" id="9Pg-9W-TB1"/>
+                                    <action selector="back:" destination="DPL-Na-aba" eventType="touchUpInside" id="1yK-hI-3WK"/>
+                                    <action selector="indietro:" destination="Id4-Mi-RkS" eventType="touchUpInside" id="osb-6T-eif"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.98106676339999999" blue="0.57369142770000003" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="DUf-Fy-gQJ" firstAttribute="leading" secondItem="lqT-Oi-EEY" secondAttribute="leading" constant="50" id="5Cw-YA-q8A"/>
+                            <constraint firstItem="cvz-SK-wAL" firstAttribute="bottom" secondItem="lqT-Oi-EEY" secondAttribute="bottom" id="66T-1c-FkO"/>
+                            <constraint firstItem="dmZ-RN-vij" firstAttribute="top" secondItem="7X8-c4-cVB" secondAttribute="bottom" constant="32" id="85g-r2-xC3"/>
+                            <constraint firstItem="lqT-Oi-EEY" firstAttribute="trailing" secondItem="dmZ-RN-vij" secondAttribute="trailing" constant="40" id="MvB-Xc-sXk"/>
+                            <constraint firstItem="cvz-SK-wAL" firstAttribute="leading" secondItem="lqT-Oi-EEY" secondAttribute="leading" id="RFk-BY-ne1"/>
                             <constraint firstItem="Cqf-rL-fsF" firstAttribute="top" secondItem="lqT-Oi-EEY" secondAttribute="top" constant="35" id="V6r-hp-yws"/>
+                            <constraint firstItem="DUf-Fy-gQJ" firstAttribute="top" secondItem="Cqf-rL-fsF" secondAttribute="bottom" constant="20" id="VlA-gj-gnP"/>
                             <constraint firstItem="7X8-c4-cVB" firstAttribute="centerY" secondItem="Cqf-rL-fsF" secondAttribute="centerY" id="X6n-JQ-KiM"/>
+                            <constraint firstItem="lqT-Oi-EEY" firstAttribute="trailing" secondItem="jFt-Us-8iJ" secondAttribute="trailing" constant="27" id="Yk9-DO-vVS"/>
+                            <constraint firstItem="jFt-Us-8iJ" firstAttribute="centerY" secondItem="Cqf-rL-fsF" secondAttribute="centerY" id="aeZ-WH-nIX"/>
                             <constraint firstItem="Cqf-rL-fsF" firstAttribute="leading" secondItem="lqT-Oi-EEY" secondAttribute="leading" constant="24" id="dye-DK-Wy5"/>
+                            <constraint firstItem="cvz-SK-wAL" firstAttribute="trailing" secondItem="lqT-Oi-EEY" secondAttribute="trailing" id="lLZ-eb-hDJ"/>
+                            <constraint firstItem="cvz-SK-wAL" firstAttribute="top" secondItem="DUf-Fy-gQJ" secondAttribute="bottom" constant="30" id="x9i-ow-3sA"/>
+                            <constraint firstItem="jFt-Us-8iJ" firstAttribute="top" secondItem="lqT-Oi-EEY" secondAttribute="top" constant="35" id="yZC-jt-9dC"/>
                             <constraint firstItem="7X8-c4-cVB" firstAttribute="centerX" secondItem="lqT-Oi-EEY" secondAttribute="centerX" id="yhd-Mg-ezy"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="lqT-Oi-EEY"/>
                     </view>
+                    <connections>
+                        <outlet property="logo" destination="DUf-Fy-gQJ" id="m4n-fw-gRG"/>
+                        <outlet property="preferiti" destination="jFt-Us-8iJ" id="5VI-4G-ib0"/>
+                        <outlet property="titolo" destination="dmZ-RN-vij" id="QRk-Fw-ZDk"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CaL-1f-hxy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1287" y="-233"/>
+            <point key="canvasLocation" x="-2786.4000000000001" y="1377.6611694152925"/>
+        </scene>
+        <!--Cerca-->
+        <scene sceneID="sjF-nO-KZS">
+            <objects>
+                <viewController storyboardIdentifier="Cerca" id="fjh-e5-ZEy" customClass="Cerca" customModule="Lazzarin_S_sportApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0Gt-Kg-SWV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.0" green="0.98106676339999999" blue="0.57369142770000003" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="QPh-2r-jA2"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qEd-mZ-NYA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1775" y="1378"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="MrS-1P-Jhv">
@@ -227,7 +288,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="di5-7C-2hU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-882" y="845"/>
+            <point key="canvasLocation" x="-713" y="-145"/>
         </scene>
     </scenes>
     <resources>
@@ -239,5 +300,6 @@
         <image name="search.png" width="40" height="40"/>
         <image name="settingIco.png" width="30" height="30"/>
         <image name="stellaIco.png" width="30" height="30"/>
+        <image name="stellaVuota.png" width="48" height="48"/>
     </resources>
 </document>

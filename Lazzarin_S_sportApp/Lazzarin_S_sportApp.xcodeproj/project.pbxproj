@@ -29,6 +29,7 @@
 		F74991D021EF29C500BAB175 /* Lazzarin_S_sportAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74991CF21EF29C500BAB175 /* Lazzarin_S_sportAppTests.swift */; };
 		F74991DB21EF29C500BAB175 /* Lazzarin_S_sportAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74991DA21EF29C500BAB175 /* Lazzarin_S_sportAppUITests.swift */; };
 		F7755B0521F718A200881DA8 /* settingIco.png in Resources */ = {isa = PBXBuildFile; fileRef = F7755B0421F718A200881DA8 /* settingIco.png */; };
+		F7755B0721F7251800881DA8 /* Cerca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7755B0621F7251800881DA8 /* Cerca.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		F74991DA21EF29C500BAB175 /* Lazzarin_S_sportAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lazzarin_S_sportAppUITests.swift; sourceTree = "<group>"; };
 		F74991DC21EF29C500BAB175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F7755B0421F718A200881DA8 /* settingIco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingIco.png; sourceTree = "<group>"; };
+		F7755B0621F7251800881DA8 /* Cerca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cerca.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 			children = (
 				F71EB2AF21EF2E08009810B9 /* Sport.swift */,
 				F71EB2D321F3226E009810B9 /* Informazioni.swift */,
+				F7755B0621F7251800881DA8 /* Cerca.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 			files = (
 				F71EB2B221EF2E27009810B9 /* Dati.swift in Sources */,
 				F71EB2B021EF2E08009810B9 /* Sport.swift in Sources */,
+				F7755B0721F7251800881DA8 /* Cerca.swift in Sources */,
 				F71EB2D421F3226E009810B9 /* Informazioni.swift in Sources */,
 				F74991BB21EF29C300BAB175 /* AppDelegate.swift in Sources */,
 			);
