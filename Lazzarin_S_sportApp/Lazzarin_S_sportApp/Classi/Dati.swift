@@ -14,10 +14,12 @@ class Dati{
     static var errore : String = ""
     static var ricerca : String = ""
     static var condizione : Bool = false
-    static var json : Array<NSDictionary> = []
+    static var json : Array<NSMutableDictionary> = []
     static var preferiti : Array<NSMutableDictionary> = caricaPreferiti()
+    static var elementiRicerca = [String : Array<NSMutableDictionary>]()
     static var selezionato = NSDictionary()
     static var informazioni = NSDictionary()
+    static var thread = DispatchQueue.global(qos: .background)
     
     //---------------------------------------------------------------
     //                     Gestione json
@@ -25,26 +27,71 @@ class Dati{
     
     public static func caricaJson(query : String, ricerca : String){
         self.ricerca = ricerca
+        json = richiestraWeb(query: query)
+    }
+    
+    public static func caricaElementiRicerca(){
+        let sport = ["Rugby", "Motorsport"]
+        for item in sport{
+            let leaugue = richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + item)
+            elementiRicerca.updateValue(leaugue, forKey: "League/" + item)
+            var team = [NSMutableDictionary]()
+            var player = [NSMutableDictionary]()
+            for item1 in leaugue{
+                var index = item1.value(forKey: "idLeague") as! String
+                let appoggio = richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" + index)
+                for item2 in appoggio{
+                    team.append(item2)
+                    index = team[team.count - 1].value(forKey: "idTeam") as! String
+                    let app = richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id=" + index)
+                    for item3 in app{
+                        player.append(item3)
+                    }
+                }
+            }
+            elementiRicerca.updateValue(team, forKey: "Team/" + item)
+            elementiRicerca.updateValue(player, forKey: "Player/" + item)
+            controllaEsistenzaImmagini(elementi: leaugue, chiave: "League")
+            controllaEsistenzaImmagini(elementi: team, chiave: "Team")
+            controllaEsistenzaImmagini(elementi: player, chiave: "Player")
+        }
+    }
+    
+    public static func elementiRicerca(chiave : String) -> [NSMutableDictionary]{
+        var dizionario = [[NSMutableDictionary]]()
+        let chiavi = Array(elementiRicerca.keys)
+        for i in 0...chiavi.count - 1{
+            if chiavi[i] == chiave{
+                let valori = Array(elementiRicerca.values)
+                dizionario.append(valori[i])
+            }
+        }
+        return dizionario[0]
+    }
+    
+    private static func richiestraWeb(query : String) -> [NSMutableDictionary]{
         let url = URL(string: query)
+        var elementi = [NSMutableDictionary]()
         let session = URLSession.shared
         session.dataTask(with: url!) { (data, response, error) in
             if error == nil{
                 do{
-                    if let risposta = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [String : Array<NSDictionary>]{
+                    if let risposta = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [String : Array<NSMutableDictionary>]{
                         for item in risposta{
-                            json = item.value
+                            elementi = item.value
                         }
                     }else{
                         errore = "nessun dato trovato"
-                        json = Array<NSDictionary>()
+                        elementi.removeAll()
                     }
                 }catch{ errore = "errore" }
             }else{ errore = "Errore di connessione" }
             condizione = true
-        }.resume()
+            }.resume()
         while !condizione {}
         condizione = false
         errore = ""
+        return elementi
     }
     
     public static func elementi(key : String) -> [String]{
@@ -55,7 +102,11 @@ class Dati{
         return oggetti
     }
     
-    public static func immagine(stringa : String) -> UIImage{
+    //---------------------------------------------------------------
+    //                     Gestione immagini
+    //---------------------------------------------------------------
+    
+    public static func immagine(stringa : String, chiave : String){
         let url = URL(string: stringa)
         let session = URLSession.shared
         var immagine = UIImage()
@@ -67,30 +118,54 @@ class Dati{
                     errore = "erorre si connessione"
                     return
                 }
-                immagine = UIImage(data: data)!
+                immagine = UIImage(data: data) ?? UIImage()
                 condizione = true
                 }.resume()
             while !condizione {}
             condizione = false
             errore = ""
         }
-        return immagine
+        let imm = immagine.pngData()! as NSData
+        UserDefaults.standard.set(imm, forKey: chiave)
     }
     
-    public static func aggiungiSelezionato(tag : Int){
-        selezionato = json[tag]
-        informazioni = NSDictionary()
+    
+    private static func controllaEsistenzaImmagini(elementi : [NSMutableDictionary], chiave : String){
+        for item in elementi{
+            let id = item.value(forKey: "id" + chiave) as! String
+            var urlImm = ""
+            switch chiave{
+            case "Player": urlImm = "strCutout"; break
+            case "Team": urlImm = "strTeamBadge"; break
+            default: urlImm = "strBadge"; break
+            }
+            let data = UserDefaults.standard.value(forKey: id)
+            if  data == nil{
+                immagine(stringa: (item.value(forKey: urlImm) as? String ?? ""), chiave: id)
+            }
+        }
     }
     
-    public static func aggiungiSelezionatoInformazioni(tag : Int){
-        informazioni = json[tag]
+    public static func immagine(chiave : String) -> UIImage{
+        let data = UserDefaults.standard.value(forKey: chiave)
+        if data != nil{
+            return UIImage(data: (data as! NSData) as Data)!
+        }
+        return UIImage()
     }
+    
+    //---------------------------------------------------------------
+    //                     Gestione elementi json
+    //---------------------------------------------------------------
     
     public static func creaView(dimensioni : [CGRect], imm : UIImage, testo : String, stella : [Bool], tag : Int) -> UIView{
         let view = UIView(frame: dimensioni[0])
-        let bottone = UIButton(frame: dimensioni[1])
-        bottone.setImage(UIImage(named: "cerchio.png"), for: .normal)
-        bottone.tag = tag
+        if dimensioni[1].size.width > -1{
+            let bottone = UIButton(frame: dimensioni[1])
+            bottone.setImage(UIImage(named: "cerchio.png"), for: .normal)
+            bottone.tag = tag
+            view.addSubview(bottone)
+        }
         let label = UILabel(frame: dimensioni[2])
         label.numberOfLines = 0
         label.text = testo
@@ -106,10 +181,18 @@ class Dati{
             }
             view.addSubview(immStella)
         }
-        view.addSubview(bottone)
         view.addSubview(label)
         view.addSubview(immagine)
         return view
+    }
+    
+    public static func aggiungiSelezionato(tag : Int){
+        selezionato = json[tag]
+        informazioni = NSDictionary()
+    }
+    
+    public static func aggiungiSelezionatoInformazioni(tag : Int){
+        informazioni = json[tag]
     }
     
     //---------------------------------------------------------------

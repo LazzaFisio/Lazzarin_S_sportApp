@@ -57,28 +57,30 @@ class Sport: UIViewController {
         cerca.isHidden = true
     }
     
-    func crea(strTitolo : String, immagini : [UIImage], nomeTitolo : String, azione : Selector){
+    func crea(strTitolo : String, nomeTitolo : String, azione : Selector){
         var i = 0
         var height = 0
         var view = UIView()
         var stelle : [Bool] = []
         while i < Dati.json.count{
             var testo = Dati.elementi(key: nomeTitolo)[i]
-            if Dati.preferito(valore: Dati.elementi(key: "id" + Dati.ricerca)[i], opzione: Dati.ricerca){
+            var id =  Dati.elementi(key: "id" + Dati.ricerca)[i]
+            if Dati.preferito(valore: id, opzione: Dati.ricerca){
                 stelle = [true, true]
             }else{ stelle = [false]}
             var dimensioni = arrayDimensioni(view: CGRect(x: 30, y: height, width: 148, height: 168), testo: testo, stella: stelle[0])
-            view = Dati.creaView(dimensioni: dimensioni, imm: immagini[i], testo: testo, stella: stelle, tag: i)
+            view = Dati.creaView(dimensioni: dimensioni, imm: Dati.trovaImmagine(chiave: id), testo: testo, stella: stelle, tag: i)
             aggiungiAzione(azione: azione, view: view)
             contenitore.addSubview(view)
             i += 1
             if i < Dati.json.count{
                 testo = Dati.elementi(key: nomeTitolo)[i]
-                if Dati.preferito(valore: Dati.elementi(key: "id" + Dati.ricerca)[i], opzione: Dati.ricerca){
+                id =  Dati.elementi(key: "id" + Dati.ricerca)[i]
+                if Dati.preferito(valore: id, opzione: Dati.ricerca){
                     stelle = [true, true]
                 }else{ stelle = [false]}
                 dimensioni = arrayDimensioni(view: CGRect(x: Int(self.view.frame.width) - (30 + 148), y: height, width: 148, height: 168), testo: testo, stella: stelle[0])
-                view = Dati.creaView(dimensioni: dimensioni, imm: immagini[i], testo: Dati.elementi(key: nomeTitolo)[i], stella: stelle, tag: i)
+                view = Dati.creaView(dimensioni: dimensioni, imm: Dati.trovaImmagine(chiave: id), testo: Dati.elementi(key: nomeTitolo)[i], stella: stelle, tag: i)
                 aggiungiAzione(azione: azione, view: view)
                 contenitore.addSubview(view)
             }
@@ -143,6 +145,12 @@ class Sport: UIViewController {
     
     @IBAction func infoAzione(_ sender: Any) {
         viewInfo = (storyboard?.instantiateViewController(withIdentifier: "Informazioni"))!
+        controllaView()
+        present(viewInfo, animated: true, completion: nil)
+    }
+    
+    @IBAction func cerca(_ sender: Any) {
+        viewInfo = (storyboard?.instantiateViewController(withIdentifier: "Cerca"))!
         controllaView()
         present(viewInfo, animated: true, completion: nil)
     }
@@ -264,14 +272,15 @@ class Sport: UIViewController {
                 Dati.caricaJson(query: infomazioni[0], ricerca: infomazioni[1])
             }
             if Dati.json.count > 0{
-                var immagini : [UIImage] = []
                 for i in 0...Dati.json.count - 1{
-                    immagini.append(Dati.immagine(stringa: Dati.elementi(key: infomazioni[2])[i]))
+                    if UserDefaults.standard.value(forKey: Dati.elementi(key: "id" + Dati.ricerca)[i]) == nil{
+                         Dati.immagine(stringa: Dati.elementi(key: infomazioni[2])[i], chiave: Dati.elementi(key: "id" + Dati.ricerca)[i])
+                    }
                 }
                 DispatchQueue.main.async {
                     self.cancellaUIView()
                     self.contenitore.contentSize = CGSize(width: Int(self.view.frame.width), height: (200 * Dati.json.count / 2) + 84)
-                    self.crea(strTitolo: titolo, immagini: immagini, nomeTitolo: infomazioni[3], azione: azione)
+                    self.crea(strTitolo: titolo, nomeTitolo: infomazioni[3], azione: azione)
                     if !preferiti{
                         self.contenitore.setContentOffset(CGPoint(x: 0, y: self.contenitore.contentInset.top), animated: true)
                     }
