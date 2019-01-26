@@ -83,7 +83,7 @@ class Informazioni: UIViewController {
     }
     
     func caricaInfoLeague(){
-        logo.image = Dati.trovaImmagine(chiave: dizionario.value(forKey: "idLeague") as! String)
+        logo.image = Dati.immagine(chiave: dizionario.value(forKey: "idLeague") as! String, url: "")
         titolo.text = dizionario.value(forKey: "strLeague") as? String ?? ""
         if Dati.preferito(valore: dizionario.value(forKey: "idLeague") as! String, opzione: "League"){
             preferiti.setBackgroundImage(UIImage(named: "stellaPiena.png"), for: .normal)

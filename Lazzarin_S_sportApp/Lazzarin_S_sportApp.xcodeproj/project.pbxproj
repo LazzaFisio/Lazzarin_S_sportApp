@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		F71EB2B021EF2E08009810B9 /* Sport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71EB2AF21EF2E08009810B9 /* Sport.swift */; };
 		F71EB2B221EF2E27009810B9 /* Dati.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71EB2B121EF2E27009810B9 /* Dati.swift */; };
-		F71EB2B621EF2E38009810B9 /* cerchio.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2B321EF2E38009810B9 /* cerchio.png */; };
 		F71EB2B721EF2E38009810B9 /* rugby.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2B421EF2E38009810B9 /* rugby.png */; };
 		F71EB2B821EF2E38009810B9 /* motorsport.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2B521EF2E38009810B9 /* motorsport.png */; };
 		F71EB2BF21EF37C4009810B9 /* stellaPiena.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2BE21EF37C4009810B9 /* stellaPiena.png */; };
@@ -18,18 +17,24 @@
 		F71EB2C821F09AD2009810B9 /* stellaIco.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2C721F09AD2009810B9 /* stellaIco.png */; };
 		F71EB2CA21F09C2E009810B9 /* campoIco.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2C921F09C2D009810B9 /* campoIco.png */; };
 		F71EB2CE21F09F85009810B9 /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2CD21F09F84009810B9 /* info.png */; };
-		F71EB2D021F1CA95009810B9 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2CF21F1CA94009810B9 /* back.png */; };
 		F71EB2D221F1D16A009810B9 /* loader.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2D121F1D168009810B9 /* loader.png */; };
 		F71EB2D421F3226E009810B9 /* Informazioni.swift in Sources */ = {isa = PBXBuildFile; fileRef = F71EB2D321F3226E009810B9 /* Informazioni.swift */; };
-		F71EB2D621F32862009810B9 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2D521F3285E009810B9 /* search.png */; };
 		F74991BB21EF29C300BAB175 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74991BA21EF29C300BAB175 /* AppDelegate.swift */; };
 		F74991C021EF29C300BAB175 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F74991BE21EF29C300BAB175 /* Main.storyboard */; };
 		F74991C221EF29C500BAB175 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F74991C121EF29C500BAB175 /* Assets.xcassets */; };
 		F74991C521EF29C500BAB175 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F74991C321EF29C500BAB175 /* LaunchScreen.storyboard */; };
 		F74991D021EF29C500BAB175 /* Lazzarin_S_sportAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74991CF21EF29C500BAB175 /* Lazzarin_S_sportAppTests.swift */; };
 		F74991DB21EF29C500BAB175 /* Lazzarin_S_sportAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74991DA21EF29C500BAB175 /* Lazzarin_S_sportAppUITests.swift */; };
+		F75929B621FAFCDC0033F4F8 /* ViewAttesa.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75929B521FAFCDC0033F4F8 /* ViewAttesa.swift */; };
+		F75929B921FB1AC70033F4F8 /* League.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75929B821FB1AC70033F4F8 /* League.swift */; };
+		F75929BB21FB85EB0033F4F8 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = F75929BA21FB85EB0033F4F8 /* search.png */; };
+		F75929BD21FB86780033F4F8 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = F75929BC21FB86780033F4F8 /* back.png */; };
+		F75929C321FB87B60033F4F8 /* cerchio.png in Resources */ = {isa = PBXBuildFile; fileRef = F75929C221FB87B60033F4F8 /* cerchio.png */; };
+		F76B913B21F9B229007A460F /* player.png in Resources */ = {isa = PBXBuildFile; fileRef = F76B913A21F9B229007A460F /* player.png */; };
+		F76B913D21F9B261007A460F /* team.png in Resources */ = {isa = PBXBuildFile; fileRef = F76B913C21F9B260007A460F /* team.png */; };
 		F7755B0521F718A200881DA8 /* settingIco.png in Resources */ = {isa = PBXBuildFile; fileRef = F7755B0421F718A200881DA8 /* settingIco.png */; };
 		F7755B0721F7251800881DA8 /* Cerca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7755B0621F7251800881DA8 /* Cerca.swift */; };
+		F7C92DA721F9CEB3003A14C1 /* Preferiti.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C92DA621F9CEB2003A14C1 /* Preferiti.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +57,6 @@
 /* Begin PBXFileReference section */
 		F71EB2AF21EF2E08009810B9 /* Sport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sport.swift; sourceTree = "<group>"; };
 		F71EB2B121EF2E27009810B9 /* Dati.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dati.swift; sourceTree = "<group>"; };
-		F71EB2B321EF2E38009810B9 /* cerchio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cerchio.png; sourceTree = "<group>"; };
 		F71EB2B421EF2E38009810B9 /* rugby.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rugby.png; sourceTree = "<group>"; };
 		F71EB2B521EF2E38009810B9 /* motorsport.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = motorsport.png; sourceTree = "<group>"; };
 		F71EB2BE21EF37C4009810B9 /* stellaPiena.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stellaPiena.png; sourceTree = "<group>"; };
@@ -61,10 +65,8 @@
 		F71EB2C721F09AD2009810B9 /* stellaIco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stellaIco.png; sourceTree = "<group>"; };
 		F71EB2C921F09C2D009810B9 /* campoIco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = campoIco.png; sourceTree = "<group>"; };
 		F71EB2CD21F09F84009810B9 /* info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = info.png; sourceTree = "<group>"; };
-		F71EB2CF21F1CA94009810B9 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		F71EB2D121F1D168009810B9 /* loader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader.png; sourceTree = "<group>"; };
 		F71EB2D321F3226E009810B9 /* Informazioni.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Informazioni.swift; sourceTree = "<group>"; };
-		F71EB2D521F3285E009810B9 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
 		F74991B721EF29C300BAB175 /* Lazzarin_S_sportApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lazzarin_S_sportApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F74991BA21EF29C300BAB175 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F74991BF21EF29C300BAB175 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -77,8 +79,16 @@
 		F74991D621EF29C500BAB175 /* Lazzarin_S_sportAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Lazzarin_S_sportAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F74991DA21EF29C500BAB175 /* Lazzarin_S_sportAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lazzarin_S_sportAppUITests.swift; sourceTree = "<group>"; };
 		F74991DC21EF29C500BAB175 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F75929B521FAFCDC0033F4F8 /* ViewAttesa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAttesa.swift; sourceTree = "<group>"; };
+		F75929B821FB1AC70033F4F8 /* League.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = League.swift; sourceTree = "<group>"; };
+		F75929BA21FB85EB0033F4F8 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
+		F75929BC21FB86780033F4F8 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
+		F75929C221FB87B60033F4F8 /* cerchio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cerchio.png; sourceTree = "<group>"; };
+		F76B913A21F9B229007A460F /* player.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player.png; sourceTree = "<group>"; };
+		F76B913C21F9B260007A460F /* team.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = team.png; sourceTree = "<group>"; };
 		F7755B0421F718A200881DA8 /* settingIco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingIco.png; sourceTree = "<group>"; };
 		F7755B0621F7251800881DA8 /* Cerca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cerca.swift; sourceTree = "<group>"; };
+		F7C92DA621F9CEB2003A14C1 /* Preferiti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferiti.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +119,7 @@
 		F71EB2AC21EF2D61009810B9 /* Immagini */ = {
 			isa = PBXGroup;
 			children = (
+				F76B913721F9B1B8007A460F /* Cerca */,
 				F71EB2C221F09AA2009810B9 /* Icone */,
 				F71EB2BD21EF3648009810B9 /* View sport */,
 			);
@@ -119,6 +130,8 @@
 			isa = PBXGroup;
 			children = (
 				F71EB2B121EF2E27009810B9 /* Dati.swift */,
+				F75929B521FAFCDC0033F4F8 /* ViewAttesa.swift */,
+				F75929B721FB1A940033F4F8 /* Celle */,
 				F71EB2AE21EF2DC5009810B9 /* ViewController */,
 			);
 			path = Classi;
@@ -130,6 +143,7 @@
 				F71EB2AF21EF2E08009810B9 /* Sport.swift */,
 				F71EB2D321F3226E009810B9 /* Informazioni.swift */,
 				F7755B0621F7251800881DA8 /* Cerca.swift */,
+				F7C92DA621F9CEB2003A14C1 /* Preferiti.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -137,11 +151,11 @@
 		F71EB2BD21EF3648009810B9 /* View sport */ = {
 			isa = PBXGroup;
 			children = (
-				F71EB2D521F3285E009810B9 /* search.png */,
+				F75929BA21FB85EB0033F4F8 /* search.png */,
 				F71EB2D121F1D168009810B9 /* loader.png */,
-				F71EB2CF21F1CA94009810B9 /* back.png */,
 				F71EB2CD21F09F84009810B9 /* info.png */,
-				F71EB2B321EF2E38009810B9 /* cerchio.png */,
+				F75929C221FB87B60033F4F8 /* cerchio.png */,
+				F75929BC21FB86780033F4F8 /* back.png */,
 				F71EB2B521EF2E38009810B9 /* motorsport.png */,
 				F71EB2B421EF2E38009810B9 /* rugby.png */,
 				F71EB2BE21EF37C4009810B9 /* stellaPiena.png */,
@@ -211,6 +225,23 @@
 				F74991DC21EF29C500BAB175 /* Info.plist */,
 			);
 			path = Lazzarin_S_sportAppUITests;
+			sourceTree = "<group>";
+		};
+		F75929B721FB1A940033F4F8 /* Celle */ = {
+			isa = PBXGroup;
+			children = (
+				F75929B821FB1AC70033F4F8 /* League.swift */,
+			);
+			path = Celle;
+			sourceTree = "<group>";
+		};
+		F76B913721F9B1B8007A460F /* Cerca */ = {
+			isa = PBXGroup;
+			children = (
+				F76B913A21F9B229007A460F /* player.png */,
+				F76B913C21F9B260007A460F /* team.png */,
+			);
+			path = Cerca;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,20 +348,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F71EB2D621F32862009810B9 /* search.png in Resources */,
+				F75929BB21FB85EB0033F4F8 /* search.png in Resources */,
+				F76B913D21F9B261007A460F /* team.png in Resources */,
 				F7755B0521F718A200881DA8 /* settingIco.png in Resources */,
 				F71EB2B821EF2E38009810B9 /* motorsport.png in Resources */,
 				F71EB2B721EF2E38009810B9 /* rugby.png in Resources */,
 				F71EB2CA21F09C2E009810B9 /* campoIco.png in Resources */,
-				F71EB2B621EF2E38009810B9 /* cerchio.png in Resources */,
-				F71EB2D021F1CA95009810B9 /* back.png in Resources */,
+				F76B913B21F9B229007A460F /* player.png in Resources */,
 				F74991C521EF29C500BAB175 /* LaunchScreen.storyboard in Resources */,
 				F74991C221EF29C500BAB175 /* Assets.xcassets in Resources */,
 				F71EB2C821F09AD2009810B9 /* stellaIco.png in Resources */,
 				F71EB2CE21F09F85009810B9 /* info.png in Resources */,
+				F75929C321FB87B60033F4F8 /* cerchio.png in Resources */,
 				F71EB2D221F1D16A009810B9 /* loader.png in Resources */,
 				F74991C021EF29C300BAB175 /* Main.storyboard in Resources */,
 				F71EB2C621F09ABB009810B9 /* calcioIco.png in Resources */,
+				F75929BD21FB86780033F4F8 /* back.png in Resources */,
 				F71EB2C121EF37CC009810B9 /* stellaVuota.png in Resources */,
 				F71EB2BF21EF37C4009810B9 /* stellaPiena.png in Resources */,
 			);
@@ -357,7 +390,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7C92DA721F9CEB3003A14C1 /* Preferiti.swift in Sources */,
 				F71EB2B221EF2E27009810B9 /* Dati.swift in Sources */,
+				F75929B921FB1AC70033F4F8 /* League.swift in Sources */,
+				F75929B621FAFCDC0033F4F8 /* ViewAttesa.swift in Sources */,
 				F71EB2B021EF2E08009810B9 /* Sport.swift in Sources */,
 				F7755B0721F7251800881DA8 /* Cerca.swift in Sources */,
 				F71EB2D421F3226E009810B9 /* Informazioni.swift in Sources */,

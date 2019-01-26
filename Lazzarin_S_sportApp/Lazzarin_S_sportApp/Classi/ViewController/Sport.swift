@@ -32,8 +32,9 @@ class Sport: UIViewController {
         super.viewDidLoad()
         creaSport()
         attesa.isHidden = true
-        //let domain = Bundle.main.bundleIdentifier!
-        //UserDefaults.standard.removePersistentDomain(forName: domain)
+        Dati.caricaPreferiti()
+        Dati.viewAttesa = ViewAttesa(view: view, valore: "Carico...", colore: attesa.backgroundColor!)
+        //UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
     }
     
     func creaSport(){
@@ -54,7 +55,6 @@ class Sport: UIViewController {
         Dati.ricerca = ""
         back.isHidden = true
         info.isHidden = true
-        cerca.isHidden = true
     }
     
     func crea(strTitolo : String, nomeTitolo : String, azione : Selector){
@@ -69,7 +69,7 @@ class Sport: UIViewController {
                 stelle = [true, true]
             }else{ stelle = [false]}
             var dimensioni = arrayDimensioni(view: CGRect(x: 30, y: height, width: 148, height: 168), testo: testo, stella: stelle[0])
-            view = Dati.creaView(dimensioni: dimensioni, imm: Dati.trovaImmagine(chiave: id), testo: testo, stella: stelle, tag: i)
+            view = Dati.creaView(dimensioni: dimensioni, imm: Dati.immagine(chiave: id, url: ""), testo: testo, stella: stelle, tag: i)
             aggiungiAzione(azione: azione, view: view)
             contenitore.addSubview(view)
             i += 1
@@ -80,7 +80,7 @@ class Sport: UIViewController {
                     stelle = [true, true]
                 }else{ stelle = [false]}
                 dimensioni = arrayDimensioni(view: CGRect(x: Int(self.view.frame.width) - (30 + 148), y: height, width: 148, height: 168), testo: testo, stella: stelle[0])
-                view = Dati.creaView(dimensioni: dimensioni, imm: Dati.trovaImmagine(chiave: id), testo: Dati.elementi(key: nomeTitolo)[i], stella: stelle, tag: i)
+                view = Dati.creaView(dimensioni: dimensioni, imm: Dati.immagine(chiave: id, url: ""), testo: Dati.elementi(key: nomeTitolo)[i], stella: stelle, tag: i)
                 aggiungiAzione(azione: azione, view: view)
                 contenitore.addSubview(view)
             }
@@ -248,22 +248,11 @@ class Sport: UIViewController {
         
     }
     
-    func funcRotazione(){
-        UIView.animate(withDuration: 0.4, delay: 0, options: .curveLinear, animations: {
-            self.immCarico.transform = self.immCarico.transform.rotated(by: CGFloat(Double.pi))
-        }) { (success) in
-            if !self.attesa.isHidden{
-                self.funcRotazione()
-            }
-        }
-    }
-    
     func cambiaView(infomazioni : [String], titolo : String, tag : Int, azione : Selector, preferiti : Bool){
         let thread  = DispatchQueue.global(qos: .background)
         thread.async {
             DispatchQueue.main.async {
-                self.attesa.isHidden = false
-                self.funcRotazione()
+                Dati.viewAttesa.avviaRotazione()
             }
             if tag != -1 && Dati.json.count > 0{
                 Dati.aggiungiSelezionato(tag: tag)
@@ -273,9 +262,7 @@ class Sport: UIViewController {
             }
             if Dati.json.count > 0{
                 for i in 0...Dati.json.count - 1{
-                    if UserDefaults.standard.value(forKey: Dati.elementi(key: "id" + Dati.ricerca)[i]) == nil{
-                         Dati.immagine(stringa: Dati.elementi(key: infomazioni[2])[i], chiave: Dati.elementi(key: "id" + Dati.ricerca)[i])
-                    }
+                    Dati.immagine(chiave: Dati.elementi(key: "id" + Dati.ricerca)[i], url: Dati.elementi(key: infomazioni[2])[i])
                 }
                 DispatchQueue.main.async {
                     self.cancellaUIView()
@@ -295,7 +282,7 @@ class Sport: UIViewController {
                 }
             }
             DispatchQueue.main.async {
-                self.attesa.isHidden = true
+                Dati.viewAttesa.fermaRotazione()
             }
         }
     }
@@ -305,7 +292,10 @@ class Sport: UIViewController {
         thread.async {
             while !self.viewInfo.isBeingDismissed{}
             DispatchQueue.main.async {
-                self.aggiornaStelle()
+                if self.titolo.text != "TUTTI GLI SPORT"{
+                    self.aggiornaStelle()
+                }
+                Dati.viewAttesa.aggiungiAllaView(view: self.view)
             }
         }
     }

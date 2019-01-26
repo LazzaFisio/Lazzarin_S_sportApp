@@ -13,13 +13,11 @@ class Dati{
     
     static var errore : String = ""
     static var ricerca : String = ""
-    static var condizione : Bool = false
-    static var json : Array<NSMutableDictionary> = []
-    static var preferiti : Array<NSMutableDictionary> = caricaPreferiti()
-    static var elementiRicerca = [String : Array<NSMutableDictionary>]()
+    static var json : Array<NSDictionary> = []
+    static var preferiti : Array<NSMutableDictionary> = []
     static var selezionato = NSDictionary()
     static var informazioni = NSDictionary()
-    static var thread = DispatchQueue.global(qos: .background)
+    static var viewAttesa : ViewAttesa!
     
     //---------------------------------------------------------------
     //                     Gestione json
@@ -30,67 +28,30 @@ class Dati{
         json = richiestraWeb(query: query)
     }
     
-    public static func caricaElementiRicerca(){
-        let sport = ["Rugby", "Motorsport"]
-        for item in sport{
-            let leaugue = richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + item)
-            elementiRicerca.updateValue(leaugue, forKey: "League/" + item)
-            var team = [NSMutableDictionary]()
-            var player = [NSMutableDictionary]()
-            for item1 in leaugue{
-                var index = item1.value(forKey: "idLeague") as! String
-                let appoggio = richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" + index)
-                for item2 in appoggio{
-                    team.append(item2)
-                    index = team[team.count - 1].value(forKey: "idTeam") as! String
-                    let app = richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id=" + index)
-                    for item3 in app{
-                        player.append(item3)
-                    }
-                }
-            }
-            elementiRicerca.updateValue(team, forKey: "Team/" + item)
-            elementiRicerca.updateValue(player, forKey: "Player/" + item)
-            controllaEsistenzaImmagini(elementi: leaugue, chiave: "League")
-            controllaEsistenzaImmagini(elementi: team, chiave: "Team")
-            controllaEsistenzaImmagini(elementi: player, chiave: "Player")
-        }
-    }
-    
-    public static func elementiRicerca(chiave : String) -> [NSMutableDictionary]{
-        var dizionario = [[NSMutableDictionary]]()
-        let chiavi = Array(elementiRicerca.keys)
-        for i in 0...chiavi.count - 1{
-            if chiavi[i] == chiave{
-                let valori = Array(elementiRicerca.values)
-                dizionario.append(valori[i])
-            }
-        }
-        return dizionario[0]
-    }
-    
-    private static func richiestraWeb(query : String) -> [NSMutableDictionary]{
+    public static func richiestraWeb(query : String) -> [NSDictionary]{
         let url = URL(string: query)
-        var elementi = [NSMutableDictionary]()
+        var condizione = false
+        var elementi = [NSDictionary]()
         let session = URLSession.shared
-        session.dataTask(with: url!) { (data, response, error) in
-            if error == nil{
-                do{
-                    if let risposta = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [String : Array<NSMutableDictionary>]{
-                        for item in risposta{
-                            elementi = item.value
+        if(query != ""){
+            session.dataTask(with: url!) { (data, response, error) in
+                if error == nil{
+                    do{
+                        if let risposta = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [String : Array<NSDictionary>]{
+                            for item in risposta{
+                                elementi = item.value
+                            }
+                        }else{
+                            errore = "nessun dato trovato"
+                            elementi.removeAll()
                         }
-                    }else{
-                        errore = "nessun dato trovato"
-                        elementi.removeAll()
-                    }
-                }catch{ errore = "errore" }
-            }else{ errore = "Errore di connessione" }
-            condizione = true
-            }.resume()
-        while !condizione {}
-        condizione = false
-        errore = ""
+                    }catch{ errore = "errore" }
+                }else{ errore = "Errore di connessione" }
+                condizione = true
+                }.resume()
+            while !condizione {}
+            errore = ""
+        }
         return elementi
     }
     
@@ -102,12 +63,68 @@ class Dati{
         return oggetti
     }
     
+    public static func esenzialiRicerca(condizioni : [String], lista : [NSDictionary]) -> [NSMutableDictionary]{
+        var dizionario = [NSMutableDictionary]()
+        for item in lista{
+            let appoggio = NSMutableDictionary()
+            for item2 in condizioni{
+                appoggio.setValue(item.value(forKey: item2) as? String ?? "", forKey: item2)
+            }
+            dizionario.append(appoggio)
+        }
+        return dizionario
+    }
+    
+    
+    
+    public static func tutteLeghe(sport : String, restrizioni : Bool) -> [NSDictionary]{
+        let richiesta = "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport
+        if restrizioni{
+            return esenzialiRicerca(condizioni: ["strLeague", "idLeague", "strBadge"], lista: richiestraWeb(query: richiesta))
+        }else{
+            return richiestraWeb(query: richiesta)
+        }
+    }
+    
+    public static func tuttiTeam(sport : String, restrizioni : Bool) -> [NSDictionary]{
+        let leghe = tutteLeghe(sport: sport, restrizioni: restrizioni)
+        var dizionario = [NSDictionary]()
+        let query = "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id="
+        for item in leghe{
+            let appoggio = richiestraWeb(query: query + (item.value(forKey: "idLeague") as! String))
+            for item2 in appoggio{
+                dizionario.append(item2)
+            }
+        }
+        if restrizioni{
+            return esenzialiRicerca(condizioni: ["strTeam", "idTeam", "strTeamBadge"], lista: dizionario)
+        }
+        return dizionario
+    }
+    
+    public static func tuttiPlayer(sport : String, restrizioni : Bool) -> [NSDictionary]{
+        let team = tuttiTeam(sport: sport, restrizioni: restrizioni)
+        var dizionario = [NSDictionary]()
+        let query = "https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id="
+        for item in team{
+            let appoggio = richiestraWeb(query: query + (item.value(forKey: "idTeam") as! String))
+            for item2 in appoggio{
+                dizionario.append(item2)
+            }
+        }
+        if restrizioni{
+            return esenzialiRicerca(condizioni: ["strPlayer", "idPlayer", "strCutout"], lista: dizionario)
+        }
+        return dizionario
+    }
+    
     //---------------------------------------------------------------
     //                     Gestione immagini
     //---------------------------------------------------------------
     
-    public static func immagine(stringa : String, chiave : String){
+    public static func scaricaImmagine(stringa : String, chiave : String){
         let url = URL(string: stringa)
+        var condizione = false
         let session = URLSession.shared
         var immagine = UIImage()
         if stringa != ""{
@@ -122,36 +139,40 @@ class Dati{
                 condizione = true
                 }.resume()
             while !condizione {}
-            condizione = false
             errore = ""
         }
-        let imm = immagine.pngData()! as NSData
+        let imm = immagine.pngData() as NSData? ?? NSData()
         UserDefaults.standard.set(imm, forKey: chiave)
     }
     
     
-    private static func controllaEsistenzaImmagini(elementi : [NSMutableDictionary], chiave : String){
-        for item in elementi{
-            let id = item.value(forKey: "id" + chiave) as! String
-            var urlImm = ""
-            switch chiave{
-            case "Player": urlImm = "strCutout"; break
-            case "Team": urlImm = "strTeamBadge"; break
-            default: urlImm = "strBadge"; break
-            }
-            let data = UserDefaults.standard.value(forKey: id)
-            if  data == nil{
-                immagine(stringa: (item.value(forKey: urlImm) as? String ?? ""), chiave: id)
-            }
+    public static func controllaEsistenzaImmagini(chiave : String, richiesta : String){
+        let data = UserDefaults.standard.value(forKey: chiave)
+        if  data == nil{
+            scaricaImmagine(stringa: richiesta, chiave: chiave)
         }
     }
     
-    public static func immagine(chiave : String) -> UIImage{
-        let data = UserDefaults.standard.value(forKey: chiave)
+    public static func immagine(chiave : String, url : String) -> UIImage{
+        var data = UserDefaults.standard.value(forKey: chiave)
+        var immagine = UIImage()
         if data != nil{
-            return UIImage(data: (data as! NSData) as Data)!
+            let appoggio = data as! NSData
+            immagine = UIImage(data: appoggio as Data) ?? UIImage()
+        }else if url != ""{
+            scaricaImmagine(stringa: url, chiave: chiave)
+            data = UserDefaults.standard.value(forKey: chiave)
+            immagine = UIImage(data: (data as! NSData) as Data)!
         }
-        return UIImage()
+        return immagine
+    }
+    
+    public static func codImm(ricerca : String) -> String{
+        switch ricerca {
+        case "Player": return "strBadge"
+        case "Team": return "strTeamBadge"
+        default: return "strBadge"
+        }
     }
     
     //---------------------------------------------------------------
@@ -199,8 +220,7 @@ class Dati{
     //                     Gestione preferiti
     //---------------------------------------------------------------
     
-    @objc private static func caricaPreferiti() -> Array<NSMutableDictionary> {
-        var appoggio = Array<NSMutableDictionary>()
+    public static func caricaPreferiti(){
         let cercare = ["numLeague", "numTeam"]
         let nomi = ["League", "Team"]
         for i in 0...cercare.count - 1{
@@ -214,9 +234,8 @@ class Dati{
                     daAggiungere.setValue(UserDefaults.standard.value(forKey: inserire), forKey: inserire)
                 }
             }
-            appoggio.append(daAggiungere)
+            preferiti.append(daAggiungere)
         }
-        return appoggio
     }
     
     public static func aggiungiPreferiti(valore : String, opzione: String) {
