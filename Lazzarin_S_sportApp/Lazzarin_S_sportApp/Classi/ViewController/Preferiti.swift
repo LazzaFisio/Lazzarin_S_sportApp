@@ -18,10 +18,11 @@ class Preferiti: UIViewController {
     
     @IBOutlet weak var contenitore: UICollectionView!
     
-    var match = [NSDictionary]()
+    var allMatch = [NSDictionary]()
     var allTeam = [NSDictionary]()
     var league = [NSDictionary]()
     var team = [NSDictionary]()
+    var match = [NSDictionary]()
     var elementoScelto = NSDictionary()
     var round : [String] = []
     var stagione : [String] = []
@@ -30,7 +31,6 @@ class Preferiti: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        Dati.viewAttesa.aggiungiAllaView(view: view)
         infoPicker.delegate = self
         infoPicker.dataSource = self
         numRound.dataSource = self
@@ -43,24 +43,28 @@ class Preferiti: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        Dati.viewAttesa.aggiungiAllaView(view: view)
         league.removeAll()
-        team.removeAll()
         DispatchQueue.global(qos: .default).async {
             DispatchQueue.main.async {
                 Dati.viewAttesa.avviaRotazione()
             }
             self.league = self.caricaValori(item: Dati.preferiti[0])
-            self.team = self.caricaValori(item: Dati.preferiti[1])
-            self.match.removeAll()
+            self.allMatch.removeAll()
+            var dimensione = 0
             if self.league.count > 0{
                 self.elementoScelto = self.league[0]
                 self.trovaStagione()
                 self.trovaSqudre(row: 0)
+                dimensione = self.selezionaRoundAttuale(row: 0)
+                self.trovaMatchRound(round: dimensione)
             }
             DispatchQueue.main.async {
                 self.infoPicker.reloadAllComponents()
                 self.numRound.reloadAllComponents()
+                self.numStagioni.reloadAllComponents()
                 self.contenitore.reloadData()
+                self.numRound.selectRow(dimensione, inComponent: 0, animated: true)
                 Dati.viewAttesa.fermaRotazione()
             }
         }
@@ -99,38 +103,127 @@ class Preferiti: UIViewController {
     }
     
     func trovaSqudre(row : Int){
-        match.removeAll()
+        allMatch.removeAll()
         let id = elementoScelto.value(forKey: "id" + selezionato) as! String
-        var query = ["https://www.thesportsdb.com/api/v1/json/1/eventsround.php?id=" + id, "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" + id]
-        if round.count > 0{
-            query[0] += "&r=" + round[row]
-        }else{
-            query[0] += "&r=0"
+        let query = ["https://www.thesportsdb.com/api/v1/json/1/eventsseason.php?id=" + id + "&s=" + String(stagione[row].split(separator: ";")[0]), "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" + id]
+        allMatch = Dati.esenzialiRicerca(condizioni: ["idLeague", "strHomeTeam", "strAwayTeam", "intHomeScore", "intAwayScore", "dateEvent",  "strTime", "intRound"], lista: Dati.richiestraWeb(query: query[0]))
+        allTeam = Dati.esenzialiRicerca(condizioni: ["idTeam", "strTeam", Dati.codImm(ricerca: "Team")], lista: Dati.richiestraWeb(query: query[1]))
+        if scelta.selectedSegmentIndex == 1{
+            var team = NSDictionary()
+            for item in allTeam{
+                
+            }
         }
-        if selezionato == "Team"{
-            query = ["https://www.thesportsdb.com/api/v1/json/1/eventslast.php?id=" + id, ""]
+        let appoggio = allMatch[0].value(forKey: "intRound") as? String ?? ""
+        if appoggio == "" || appoggio == "0"{
+            var roundAttuale = 1
+            for i in 0...allMatch.count - 1{
+                if i != 0 && incrementaRound(round: i){
+                    roundAttuale += 1
+                }
+                allMatch[i].setValue(String(roundAttuale), forKey: "intRound")
+                if !round.contains(String(roundAttuale)){
+                    round.append(String(roundAttuale))
+                }
+            }
         }
-        match = Dati.esenzialiRicerca(condizioni: ["idLeague", "strHomeTeam", "strAwayTeam", "intHomeScore", "intAwayScore", "dateEvent",  "strTime"], lista: Dati.richiestraWeb(query: query[0]))
-        if query[1] != ""{
-            allTeam = Dati.esenzialiRicerca(condizioni: ["idTeam", "strTeam", Dati.codImm(ricerca: "Team")], lista: Dati.richiestraWeb(query: query[1]))
+        controllaDuplicati()
+    }
+    
+    func incrementaRound(round : Int) -> Bool{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let data1 = formatter.date(from: allMatch[round - 1].value(forKey: "dateEvent") as! String)!
+        let data2 = formatter.date(from: allMatch[round].value(forKey: "dateEvent") as! String)!
+        let appoggio = Calendar.current.dateComponents([.day], from: data1, to: data2).day ?? 0
+        if appoggio > 4{
+            return true
+        }
+        return false
+    }
+    
+    func controllaDuplicati(){
+        var index = 0
+        while index < allMatch.count - 1{
+            var condizione = false
+            let squadre = [allMatch[index].value(forKey: "strHomeTeam") as? String ?? "", allMatch[index].value(forKey: "strAwayTeam") as? String ?? "", allMatch[index].value(forKey: "intRound") as? String ?? ""]
+            let punteggio = [allMatch[index].value(forKey: "intHomeScore") as? String ?? "", allMatch[index].value(forKey: "intAwayeScore") as? String ?? ""]
+            if punteggio[0] == "" && punteggio[1] == "" {
+                for i in 0...allMatch.count - 1{
+                    let squadre2 = [allMatch[i].value(forKey: "strHomeTeam") as? String ?? "", allMatch[i].value(forKey: "strAwayTeam") as? String ?? "", allMatch[i].value(forKey: "intRound") as? String ?? ""]
+                    if index != i && squadre[0] == squadre2[0] && squadre[1] == squadre2[1] && squadre[2] == squadre2[2] {
+                        condizione = true
+                    }
+                }
+                if condizione{
+                    allMatch.remove(at: index)
+                    index -= 1
+                }
+            }
+            index += 1
+        }
+    }
+    
+    func trovaMatchRound(round : Int){
+        let appoggio = self.round[round]
+        match.removeAll()
+        for item in allMatch{
+            if item.value(forKey: "intRound") as! String == appoggio{
+                match.append(item)
+            }
         }
     }
     
     func trovaStagione(){
         stagione.removeAll()
         let query = "https://www.thesportsdb.com/api/v1/json/1/search_all_seasons.php?id=" + (elementoScelto.value(forKey: "id" + selezionato) as! String)
-        
+        let risultato = Dati.richiestraWeb(query: query)
+        for i in 0...risultato.count - 1{
+            let stagione = risultato[i].value(forKey: "strSeason") as! String
+            self.stagione.append(stagione + ";")
+            aggiornaElementiRound(row: i, caricaStagione: true)
+        }
+        stagione.reverse()
+        aggiornaElementiRound(row: 0, caricaStagione: false)
     }
     
-    func aggiornaElementiRound(row : Int){
+    func selezionaRoundAttuale(row : Int) -> Int{
+        if round.count > 0{
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-gg"
+            let data = formatter.string(from: Date())
+            var dimensione = allMatch.count - 1
+            while dimensione >= 0{
+                if (allMatch[dimensione].value(forKey: "dateEvent") as! String).compare(data) == ComparisonResult.orderedAscending{
+                    if dimensione < allMatch.count - 1{
+                        dimensione += 1
+                    }
+                    for num in 0...round.count - 1{
+                        if round[num] == allMatch[dimensione].value(forKey: "intRound") as! String{
+                            return num
+                        }
+                    }
+                }
+                dimensione -= 1
+            }
+        }
+        return 0
+    }
+    
+    func aggiornaElementiRound(row : Int, caricaStagione : Bool){
         round.removeAll()
         var query = "https://www.thesportsdb.com/api/v1/json/1/eventsseason.php?id="
         query += elementoScelto.value(forKey: "id" + selezionato) as! String + "&s=" + String(stagione[row].split(separator: ";")[0])
-        let appoggio = Dati.esenzialiRicerca(condizioni: ["intRound"], lista: Dati.richiestraWeb(query: query))
-        var dimensione = Int(appoggio[appoggio.count - 1].value(forKey: "intRound") as! String)!
+        let appoggio = Dati.esenzialiRicerca(condizioni: ["intRound", "dateEvent"], lista: Dati.richiestraWeb(query: query))
+        var dimensione = Int(appoggio[appoggio.count - 1].value(forKey: "intRound") as? String ?? "0") ?? 0
         while dimensione > 0{
             round.append(String(dimensione))
             dimensione -= 1
+        }
+        if caricaStagione{
+            let dataInizio = String((appoggio[0].value(forKey: "dateEvent") as! String).split(separator: "-")[0])
+            let dataFine = String((Int(dataInizio) ?? 0) + 1)
+            stagione[row] += dataInizio + "-" + dataFine
         }
     }
     
@@ -156,14 +249,13 @@ class Preferiti: UIViewController {
     func aggiornaPrincipale(row : Int){
         if selezionato == "League" && league.count > 0{
             elementoScelto = league[row]
-        }else if team.count > 0{
-            elementoScelto = team[row]
         }else{
             elementoScelto = NSDictionary()
         }
         if elementoScelto.count > 0{
             trovaStagione()
             trovaSqudre(row: 0)
+            trovaMatchRound(round: selezionaRoundAttuale(row: 0))
         }
         DispatchQueue.main.async {
             self.numRound.reloadAllComponents()
@@ -171,14 +263,22 @@ class Preferiti: UIViewController {
     }
     
     func aggiornaRound(row : Int){
-        trovaSqudre(row: row)
+        trovaMatchRound(round: row)
         DispatchQueue.main.async {
             self.contenitore.reloadData()
         }
     }
     
     func aggiornaStagioni(row : Int){
-        
+        aggiornaElementiRound(row: row, caricaStagione: false)
+        trovaSqudre(row: row)
+        let dimensione = selezionaRoundAttuale(row: row)
+        trovaMatchRound(round: dimensione)
+        DispatchQueue.main.async {
+            self.numRound.reloadAllComponents()
+            self.contenitore.reloadData()
+            self.numRound.selectRow(dimensione, inComponent: 0, animated: true)
+        }
     }
     
     func controllo(){
@@ -215,8 +315,6 @@ extension Preferiti: UIPickerViewDelegate, UIPickerViewDataSource{
         if pickerView.tag == 0{
             if selezionato == "League" && league.count > 0{
                 return league.count
-            }else if team.count > 0{
-                return team.count
             }
             return 1
         }else if pickerView.tag == 1{
@@ -235,9 +333,6 @@ extension Preferiti: UIPickerViewDelegate, UIPickerViewDataSource{
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
         if pickerView.tag == 0{
             var elementi = league
-            if selezionato == "Team"{
-                elementi = team
-            }
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 180, height: 70))
             let testo = UILabel(frame: CGRect(x: 66, y: 0, width: 100, height: 70))
             testo.numberOfLines = 0
@@ -254,12 +349,13 @@ extension Preferiti: UIPickerViewDelegate, UIPickerViewDataSource{
             view.addSubview(testo)
             return view
         }
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 63, height: 20))
-        let label = UILabel(frame: CGRect(x: 0, y: 2, width: 63, height: 15))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 85, height: 20))
+        let label = UILabel(frame: CGRect(x: 0, y: 2, width: 85, height: 15))
         if pickerView.tag == 1{
             label.text = round[row]
         }else{
-            label.text = String(stagione[row].split(separator: ";")[0])
+            label.text = String(stagione[row].split(separator: ";")[1])
+            label.font = UIFont(name: label.font.fontName, size: 15)
         }
         label.textAlignment = NSTextAlignment.center
         view.addSubview(label)
@@ -291,11 +387,18 @@ extension Preferiti: UICollectionViewDelegate, UICollectionViewDataSource{
     func caricaLeague(dizionario : NSDictionary, cella : League) -> UICollectionViewCell{
         var idteamH = NSDictionary(), idTeamA = NSDictionary()
         for item in allTeam{
-            let appoggio = item.value(forKey: "strTeam") as! String
-            if appoggio == dizionario.value(forKey: "strHomeTeam") as! String{
+            let appoggio = String((item.value(forKey: "strTeam") as! String).split(separator: " ")[0])
+            var squadra1 = dizionario.value(forKey: "strHomeTeam") as! String
+            var squadra2 = dizionario.value(forKey: "strAwayTeam") as! String
+            if squadra1 == "Benneton"{
+                squadra1 = "Benetton"
+            }else if squadra2 == "Benneton"{
+                squadra2 = "Benetton"
+            }
+            if squadra1.contains(appoggio){
                 idTeamA = item
             }
-            if appoggio == dizionario.value(forKey: "strAwayTeam") as! String{
+            if squadra2.contains(appoggio){
                 idteamH = item
             }
         }

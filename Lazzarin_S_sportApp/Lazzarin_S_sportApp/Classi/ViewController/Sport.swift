@@ -37,6 +37,10 @@ class Sport: UIViewController {
         //UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        Dati.viewAttesa.aggiungiAllaView(view: view)
+    }
+    
     func creaSport(){
         Dati.caricaJson(query: "https://www.thesportsdb.com/api/v1/json/1/all_sports.php", ricerca: "")
         var view = UIView()
