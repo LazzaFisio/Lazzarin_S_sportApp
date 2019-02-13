@@ -12,19 +12,16 @@ class Cerca: UIViewController {
     
     @IBOutlet weak var cerca: UITextField!
     
+    @IBOutlet weak var contenitore: UICollectionView!
+    
     @IBOutlet weak var dettagliCerca: UISegmentedControl!
-    
-    @IBOutlet weak var caricamento: UIView!
-    
-    @IBOutlet weak var caricamentoImg: UIImageView!
     
     @IBOutlet weak var nomiSport: UIPickerView!
     
-    @IBOutlet weak var contenitore: UIScrollView!
-    
-    let thread = DispatchQueue.global(qos: .default)
+    var thread = DispatchQueue.global(qos: .default)
     var elementi = [NSDictionary]()
-    var ricerca = "League"
+    var ricercaAttuale = [NSDictionary]()
+    static var ricerca = "League"
     var sportScelto = "Rugby"
     var query = ""
     
@@ -32,6 +29,9 @@ class Cerca: UIViewController {
         super.viewDidLoad()
         nomiSport.delegate = self
         nomiSport.dataSource = self
+        contenitore.dataSource = self
+        contenitore.delegate = self
+        Cerca.ricerca = "League"
         threadAttesa()
         Dati.viewAttesa.aggiungiAllaView(view: view)
         Dati.viewAttesa.aggiungiBottone()
@@ -42,77 +42,36 @@ class Cerca: UIViewController {
     @IBAction func back(_ sender: Any) {
         Dati.viewAttesa.rimuoviBottone()
         Dati.viewAttesa.fermaRotazione()
+        Cerca.ricerca = ""
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cambiaRicerca(_ sender: Any) {
-        ricerca = dettagliCerca.titleForSegment(at: dettagliCerca.selectedSegmentIndex)!
+        Cerca.ricerca = dettagliCerca.titleForSegment(at: dettagliCerca.selectedSegmentIndex)!
         threadAttesa()
     }
     
     @IBAction func aggiornaRicerca(_ sender: Any) {
         cerca.isSelected = false
         var i = 0
-        var ricercaAttuale = [NSDictionary]()
+        ricercaAttuale.removeAll()
         if cerca.text != ""{
             while i < elementi.count{
                 let daConfontare = (cerca!.text ?? "").lowercased()
-                let main = (elementi[i].value(forKey: "str" + ricerca) as! String).lowercased()
+                let main = (elementi[i].value(forKey: "str" + Cerca.ricerca) as! String).lowercased()
                 if main.contains(daConfontare){
                     ricercaAttuale.append(elementi[i])
                 }
                 i += 1
             }
-            if ricercaAttuale.count > 0{
-                aggiorna(appoggio: ricercaAttuale)
-            }else{
-                cancella()
-            }
-        }else{
-            aggiorna(appoggio: elementi)
+            
         }
+        contenitore.reloadData()
         cerca.isSelected = true
     }
     
     @IBAction func fineRicerca(_ sender: Any) {
-        
-    }
-    
-    func aggiorna(appoggio : [NSDictionary]){
-        cancella()
-        var dimensioni =
-        [CGRect(x: 0, y: 0, width: contenitore.frame.width, height: 81),
-         CGRect(x: -1, y: -1, width: -1, height: -1),
-         CGRect(x: 96, y: 12, width: 214, height: 54),
-         CGRect(x: 8, y: 8, width: 64, height: 64),
-         CGRect(x: 318, y: 15, width: 50, height: 50)]
-        contenitore.contentSize = CGSize(width: Int(view.frame.width), height: 81 * appoggio.count)
-        for i in 0...appoggio.count - 1{
-            dimensioni[0].origin.y = CGFloat(81 * i)
-            let index = "id" + ricerca
-            let condizione = Dati.preferito(valore: appoggio[i].value(forKey: index) as! String, opzione: ricerca)
-            let view = Dati.creaView(dimensioni: dimensioni, imm: Dati.immagine(chiave: appoggio[i].value(forKey: index) as! String, url: ""), testo: appoggio[i].value(forKey: "str" + ricerca) as! String, stella: [true, condizione], tag: -1)
-            contenitore.addSubview(view)
-        }
-        contenitore.setContentOffset(CGPoint(x: 0, y: self.contenitore.contentInset.top), animated: true)
-    }
-    
-    func cancella(){
-        for subviews in contenitore.subviews{
-            if subviews.subviews.count > 0{
-                subviews.removeFromSuperview()
-            }
-        }
-    }
-    
-    func funcRotazione(){
-        UIView.animate(withDuration: 0.4, delay: 0, options: .curveLinear, animations: {
-            self.caricamentoImg.transform = self.caricamentoImg.transform.rotated(by: CGFloat(Double.pi))
-        }) { (success) in
-            if !self.caricamento.isHidden{
-                self.funcRotazione()
-            }
-        }
+        view.endEditing(true)
     }
     
     func threadAttesa(){
@@ -122,17 +81,17 @@ class Cerca: UIViewController {
                 self.cerca.isSelected = false
                 self.view.endEditing(true)
             }
-            switch self.ricerca{
+            switch Cerca.ricerca{
                 case "Player": self.elementi = Dati.tuttiPlayer(sport: self.sportScelto, restrizioni: true); break
                 case "Team": self.elementi = Dati.tuttiTeam(sport: self.sportScelto, restrizioni: true); break
                 default: self.elementi = Dati.tutteLeghe(sport: self.sportScelto, restrizioni: true); break
             }
-            for item in self.elementi{
-                Dati.controllaEsistenzaImmagini(chiave: item.value(forKey: "id" + self.ricerca) as! String, richiesta: item.value(forKey: Dati.codImm(ricerca: self.ricerca)) as? String ?? "")
-            }
             DispatchQueue.main.async {
-                self.aggiorna(appoggio: self.elementi)
-                Dati.viewAttesa.fermaRotazione()
+                if Cerca.ricerca != ""{
+                    self.ricercaAttuale.removeAll()
+                    self.contenitore.reloadData()
+                    Dati.viewAttesa.fermaRotazione()
+                }
             }
         }
     }
@@ -163,4 +122,41 @@ extension Cerca: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelega
         default: return "Rugby"
         }
     }
+}
+
+extension Cerca : UICollectionViewDataSource, UICollectionViewDelegate{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if ricercaAttuale.count > 0 && ricercaAttuale.count < 50{
+            return ricercaAttuale.count
+        }
+        return elementi.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cella = contenitore.dequeueReusableCell(withReuseIdentifier: "Visualizza", for: indexPath) as! elementoRicerca
+        var appoggio = elementi[indexPath.row]
+        if ricercaAttuale.count > 0{
+            appoggio = ricercaAttuale[indexPath.row]
+        }
+        let id = appoggio.value(forKey: "id" + Cerca.ricerca) as! String
+        cella.immagine.image = Dati.immagine(chiave: id, url: appoggio.value(forKey: Dati.codImm(ricerca: Cerca.ricerca)) as? String ?? "")
+        cella.nome.text = appoggio.value(forKey: "str" + Cerca.ricerca) as? String ?? ""
+        if Cerca.ricerca != "Player"{
+            var nomeImm = "stellaVuota.png"
+            if Dati.preferito(valore: id, opzione: Cerca.ricerca){
+                nomeImm = "stellaPiena.png"
+            }
+            cella.stella.setBackgroundImage(UIImage(named: nomeImm), for: .normal)
+            cella.stella.tag = Int(id)!
+            cella.stella.isHidden = false
+        }else{
+            cella.stella.isHidden = true
+        }
+        return cella
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+    }
+    
 }

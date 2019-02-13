@@ -35,7 +35,9 @@ class ViewAttesa{
     }
     
     public func aggiungiAllaView(view : UIView){
-        view.addSubview(self.view)
+        DispatchQueue.main.async {
+            view.addSubview(self.view)
+        }
     }
     
     public func aggiungiBottone(){

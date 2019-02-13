@@ -12,8 +12,6 @@ import UIKit
 class Dati{
     
     static var errore : String = ""
-    static var ricerca : String = ""
-    static var json : Array<NSDictionary> = []
     static var preferiti : Array<NSMutableDictionary> = []
     static var selezionato = NSDictionary()
     static var informazioni = NSDictionary()
@@ -22,11 +20,6 @@ class Dati{
     //---------------------------------------------------------------
     //                     Gestione json
     //---------------------------------------------------------------
-    
-    public static func caricaJson(query : String, ricerca : String){
-        self.ricerca = ricerca
-        json = richiestraWeb(query: query)
-    }
     
     public static func richiestraWeb(query : String) -> [NSDictionary]{
         let url = URL(string: query)
@@ -55,14 +48,6 @@ class Dati{
         return elementi
     }
     
-    public static func elementi(key : String) -> [String]{
-        var oggetti : [String] = []
-        for item in json{
-            oggetti.append(item.value(forKey: key) as? String ?? "")
-        }
-        return oggetti
-    }
-    
     public static func esenzialiRicerca(condizioni : [String], lista : [NSDictionary]) -> [NSMutableDictionary]{
         var dizionario = [NSMutableDictionary]()
         for item in lista{
@@ -74,8 +59,6 @@ class Dati{
         }
         return dizionario
     }
-    
-    
     
     public static func tutteLeghe(sport : String, restrizioni : Bool) -> [NSDictionary]{
         let richiesta = "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport
@@ -91,12 +74,14 @@ class Dati{
         var dizionario = [NSDictionary]()
         let query = "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id="
         for item in leghe{
-            let appoggio = richiestraWeb(query: query + (item.value(forKey: "idLeague") as! String))
-            for item2 in appoggio{
-                dizionario.append(item2)
+            if Cerca.ricerca != ""{
+                let appoggio = richiestraWeb(query: query + (item.value(forKey: "idLeague") as! String))
+                for item2 in appoggio{
+                    dizionario.append(item2)
+                }
             }
         }
-        if restrizioni{
+        if restrizioni && Cerca.ricerca != ""{
             return esenzialiRicerca(condizioni: ["strTeam", "idTeam", "strTeamBadge"], lista: dizionario)
         }
         return dizionario
@@ -107,12 +92,14 @@ class Dati{
         var dizionario = [NSDictionary]()
         let query = "https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id="
         for item in team{
-            let appoggio = richiestraWeb(query: query + (item.value(forKey: "idTeam") as! String))
-            for item2 in appoggio{
-                dizionario.append(item2)
+            if Cerca.ricerca != ""{
+                let appoggio = richiestraWeb(query: query + (item.value(forKey: "idTeam") as! String))
+                for item2 in appoggio{
+                    dizionario.append(item2)
+                }
             }
         }
-        if restrizioni{
+        if restrizioni && Cerca.ricerca != ""{
             return esenzialiRicerca(condizioni: ["strPlayer", "idPlayer", "strCutout"], lista: dizionario)
         }
         return dizionario
@@ -145,7 +132,6 @@ class Dati{
         UserDefaults.standard.set(imm, forKey: chiave)
     }
     
-    
     public static func controllaEsistenzaImmagini(chiave : String, richiesta : String){
         let data = UserDefaults.standard.value(forKey: chiave)
         if  data == nil{
@@ -175,10 +161,6 @@ class Dati{
         }
     }
     
-    //---------------------------------------------------------------
-    //                     Gestione elementi json
-    //---------------------------------------------------------------
-    
     public static func creaView(dimensioni : [CGRect], imm : UIImage, testo : String, stella : [Bool], tag : Int) -> UIView{
         let view = UIView(frame: dimensioni[0])
         if dimensioni[1].size.width > -1{
@@ -205,15 +187,6 @@ class Dati{
         view.addSubview(label)
         view.addSubview(immagine)
         return view
-    }
-    
-    public static func aggiungiSelezionato(tag : Int){
-        selezionato = json[tag]
-        informazioni = NSDictionary()
-    }
-    
-    public static func aggiungiSelezionatoInformazioni(tag : Int){
-        informazioni = json[tag]
     }
     
     //---------------------------------------------------------------

@@ -27,7 +27,6 @@ class Preferiti: UIViewController {
     var round : [String] = []
     var stagione : [String] = []
     var selezionato = "League"
-    var viewCerca = UIViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,22 +46,22 @@ class Preferiti: UIViewController {
         league.removeAll()
         self.league = self.caricaValori(item: Dati.preferiti[0])
         self.team = self.caricaValori(item: Dati.preferiti[1])
-        threadCarica(controllo: false)
+        threadCarica()
     }
     
     @IBAction func cerca(_ sender: Any) {
-        viewCerca = (storyboard?.instantiateViewController(withIdentifier: "Cerca"))!
-        controllo()
-        present(viewCerca, animated: true, completion: nil)
+        present((storyboard?.instantiateViewController(withIdentifier: "Cerca"))!, animated: true, completion: nil)
     }
     
     @IBAction func cambiaVisualizzazione(_ sender: Any) {
         selezionato = scelta.titleForSegment(at: scelta.selectedSegmentIndex)!
         infoPicker.reloadAllComponents()
-        threadCarica(controllo: true)
+        threadCarica()
+        infoPicker.selectRow(0, inComponent: 0, animated: true)
+        numStagioni.selectRow(0, inComponent: 0, animated: true)
     }
     
-    func threadCarica(controllo : Bool){
+    func threadCarica(){
         DispatchQueue.global(qos: .default).async {
             DispatchQueue.main.async {
                 Dati.viewAttesa.avviaRotazione()
@@ -82,11 +81,7 @@ class Preferiti: UIViewController {
                 dimensione = self.selezionaRoundAttuale(row: 0)
                 self.trovaMatchRound(round: dimensione)
             }else{
-                self.stagione.removeAll()
-                self.round.removeAll()
-                self.match.removeAll()
-                self.allMatch.removeAll()
-                self.allTeam.removeAll()
+                self.cancellaTutto()
             }
             DispatchQueue.main.async {
                 self.infoPicker.reloadAllComponents()
@@ -96,6 +91,20 @@ class Preferiti: UIViewController {
                 self.numRound.selectRow(dimensione, inComponent: 0, animated: true)
                 Dati.viewAttesa.fermaRotazione()
             }
+        }
+    }
+    
+    func cancellaTutto(){
+        self.stagione.removeAll()
+        self.round.removeAll()
+        self.match.removeAll()
+        self.allMatch.removeAll()
+        self.allTeam.removeAll()
+        DispatchQueue.main.async {
+            self.infoPicker.reloadAllComponents()
+            self.numRound.reloadAllComponents()
+            self.numStagioni.reloadAllComponents()
+            self.contenitore.reloadData()
         }
     }
     
@@ -138,6 +147,7 @@ class Preferiti: UIViewController {
         }
         let appoggio = allMatch[0].value(forKey: "intRound") as? String ?? ""
         if appoggio == "" || appoggio == "0"{
+            round.removeAll()
             var roundAttuale = 1
             for i in 0...allMatch.count - 1{
                 if i != 0 && incrementaRound(round: i){
@@ -148,6 +158,7 @@ class Preferiti: UIViewController {
                     round.append(String(roundAttuale))
                 }
             }
+            round.reverse()
         }
         controllaDuplicati()
         controllaNomeSquadre()
@@ -230,16 +241,16 @@ class Preferiti: UIViewController {
     }
     
     func trovaStagione(){
-        stagione.removeAll()
         let query = "https://www.thesportsdb.com/api/v1/json/1/search_all_seasons.php?id=" + (elementoScelto.value(forKey: "idLeague") as! String)
         let risultato = Dati.richiestraWeb(query: query)
+        self.stagione.removeAll()
         for i in 0...risultato.count - 1{
             let stagione = risultato[i].value(forKey: "strSeason") as! String
             self.stagione.append(stagione + ";")
-            aggiornaElementiRound(row: i, caricaStagione: true)
+            aggiornaElementiRound(row: i, caricaStagione: true, caricaRound: false)
         }
         stagione.reverse()
-        aggiornaElementiRound(row: 0, caricaStagione: false)
+        aggiornaElementiRound(row: 0, caricaStagione: false, caricaRound: true)
     }
     
     func selezionaRoundAttuale(row : Int) -> Int{
@@ -265,15 +276,17 @@ class Preferiti: UIViewController {
         return -1
     }
     
-    func aggiornaElementiRound(row : Int, caricaStagione : Bool){
-        round.removeAll()
+    func aggiornaElementiRound(row : Int, caricaStagione : Bool, caricaRound : Bool){
         var query = "https://www.thesportsdb.com/api/v1/json/1/eventsseason.php?id="
         query += elementoScelto.value(forKey: "idLeague") as! String + "&s=" + String(stagione[row].split(separator: ";")[0])
         let appoggio = Dati.esenzialiRicerca(condizioni: ["intRound", "dateEvent"], lista: Dati.richiestraWeb(query: query))
-        var dimensione = Int(appoggio[appoggio.count - 1].value(forKey: "intRound") as? String ?? "0") ?? 0
-        while dimensione > 0{
-            round.append(String(dimensione))
-            dimensione -= 1
+        if caricaRound{
+            round.removeAll()
+            var dimensione = Int(appoggio[appoggio.count - 1].value(forKey: "intRound") as? String ?? "0") ?? 0
+            while dimensione > 0{
+                round.append(String(dimensione))
+                dimensione -= 1
+            }
         }
         if caricaStagione{
             let dataInizio = String((appoggio[0].value(forKey: "dateEvent") as! String).split(separator: "-")[0])
@@ -284,18 +297,21 @@ class Preferiti: UIViewController {
     
     func aggiorna(row : Int, tag : Int){
         DispatchQueue.global(qos: .default).async{
+            var condizione = false
             DispatchQueue.main.async {
                 Dati.viewAttesa.avviaRotazione()
+                condizione = self.numRound.isHidden
             }
             if tag == 0{
                 self.aggiornaPrincipale(row: row)
-            }else if tag == 1 && !self.numRound.isHidden{
+            }else if tag == 1 && !condizione{
                 self.aggiornaRound(row: row)
             }else{
                 self.aggiornaStagioni(row: row)
             }
             DispatchQueue.main.async {
                 self.contenitore.reloadData()
+                self.contenitore.selectItem(at: IndexPath.init(row: 0, section: 0), animated: true, scrollPosition: UICollectionView.ScrollPosition(rawValue: 0))
                 Dati.viewAttesa.fermaRotazione()
             }
         }
@@ -315,6 +331,7 @@ class Preferiti: UIViewController {
             trovaMatchRound(round: selezionaRoundAttuale(row: 0))
         }
         DispatchQueue.main.async {
+            self.numStagioni.selectRow(0, inComponent: 0, animated: true)
             self.numRound.reloadAllComponents()
             self.numStagioni.reloadAllComponents()
         }
@@ -328,7 +345,7 @@ class Preferiti: UIViewController {
     }
     
     func aggiornaStagioni(row : Int){
-        aggiornaElementiRound(row: row, caricaStagione: false)
+        aggiornaElementiRound(row: row, caricaStagione: false, caricaRound: true)
         trovaSqudre(row: row)
         let dimensione = selezionaRoundAttuale(row: row)
         trovaMatchRound(round: dimensione)
@@ -336,13 +353,6 @@ class Preferiti: UIViewController {
             self.numRound.reloadAllComponents()
             self.contenitore.reloadData()
             self.numRound.selectRow(dimensione, inComponent: 0, animated: true)
-        }
-    }
-    
-    func controllo(){
-        DispatchQueue.global(qos: .default).async {
-            while !self.viewCerca.isBeingDismissed{}
-            self.viewWillAppear(true)
         }
     }
 
