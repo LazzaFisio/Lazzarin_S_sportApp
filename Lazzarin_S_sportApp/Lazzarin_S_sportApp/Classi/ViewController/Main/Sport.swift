@@ -222,25 +222,21 @@ class Sport: UIViewController {
     }
     
     func visualizzaView(){
-        var identificatore = Sport.ricerca
-        if identificatore == ""{
+        if Dati.informazioni.count == 0{
             if titolo.text != "TUTTI GLI SPORT"{
-                UIApplication.shared.open(URL(string: "https://www.google.com/search?q=" + (titolo.text?.lowercased())!)!)
+                Internet.richiesta = "https://www.google.com/search?q=" + (titolo.text?.lowercased())!
             }else{
-                UIApplication.shared.open(URL(string: "https://www.google.com/search?q=" + (Dati.informazioni.value(forKey: "nome") as! String))!)
+                Internet.richiesta = "https://www.google.com/search?q=" + (Dati.informazioni.value(forKey: "nome") as! String)
             }
         }else{
-            if Dati.informazioni.count == 0{
-                switch Sport.ricerca{
-                case "Player": identificatore = "Team"; break
-                case "Team": identificatore = "League"; break
-                default: identificatore = "Sport"; break
-                }
+            var daCercare = ""
+            switch titolo.text{
+                case "TUTTI GLI SPORT": daCercare = Dati.informazioni.value(forKey: "nome") as! String; break
+                default: daCercare = Dati.informazioni.value(forKey: "str" + Sport.ricerca) as! String; break
             }
-            viewInfo = UIStoryboard.init(name: "Info", bundle: nil).instantiateViewController(withIdentifier: identificatore)
-            controllaView()
-            present(viewInfo, animated: true, completion: nil)
+            Internet.richiesta =  "https://www.google.com/search?q=" + daCercare
         }
+        present((storyboard?.instantiateViewController(withIdentifier: "Internet"))!, animated: true, completion: nil)
     }
     
 }

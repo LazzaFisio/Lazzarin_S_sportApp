@@ -29,11 +29,10 @@
 		F75929BB21FB85EB0033F4F8 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = F75929BA21FB85EB0033F4F8 /* search.png */; };
 		F75929BD21FB86780033F4F8 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = F75929BC21FB86780033F4F8 /* back.png */; };
 		F75929C321FB87B60033F4F8 /* cerchio.png in Resources */ = {isa = PBXBuildFile; fileRef = F75929C221FB87B60033F4F8 /* cerchio.png */; };
-		F75AF2C5220469500075A474 /* LeagueInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75AF2C4220469500075A474 /* LeagueInfo.swift */; };
 		F75E54512202E8740094CC60 /* elementoRicerca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E54502202E8740094CC60 /* elementoRicerca.swift */; };
 		F75E54532202FE0B0094CC60 /* elementoSport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E54522202FE0B0094CC60 /* elementoSport.swift */; };
-		F75E5456220428E80094CC60 /* Info.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F75E5455220428E80094CC60 /* Info.storyboard */; };
 		F75E545A22042A090094CC60 /* Cerca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E545922042A090094CC60 /* Cerca.swift */; };
+		F7651C71221443CC00E0ABBC /* Internet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7651C70221443CC00E0ABBC /* Internet.swift */; };
 		F76B913B21F9B229007A460F /* player.png in Resources */ = {isa = PBXBuildFile; fileRef = F76B913A21F9B229007A460F /* player.png */; };
 		F76B913D21F9B261007A460F /* team.png in Resources */ = {isa = PBXBuildFile; fileRef = F76B913C21F9B260007A460F /* team.png */; };
 		F7755B0521F718A200881DA8 /* settingIco.png in Resources */ = {isa = PBXBuildFile; fileRef = F7755B0421F718A200881DA8 /* settingIco.png */; };
@@ -86,11 +85,10 @@
 		F75929BA21FB85EB0033F4F8 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
 		F75929BC21FB86780033F4F8 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		F75929C221FB87B60033F4F8 /* cerchio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cerchio.png; sourceTree = "<group>"; };
-		F75AF2C4220469500075A474 /* LeagueInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueInfo.swift; sourceTree = "<group>"; };
 		F75E54502202E8740094CC60 /* elementoRicerca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = elementoRicerca.swift; sourceTree = "<group>"; };
 		F75E54522202FE0B0094CC60 /* elementoSport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = elementoSport.swift; sourceTree = "<group>"; };
-		F75E5455220428E80094CC60 /* Info.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Info.storyboard; sourceTree = "<group>"; };
 		F75E545922042A090094CC60 /* Cerca.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cerca.swift; sourceTree = "<group>"; };
+		F7651C70221443CC00E0ABBC /* Internet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Internet.swift; sourceTree = "<group>"; };
 		F76B913A21F9B229007A460F /* player.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player.png; sourceTree = "<group>"; };
 		F76B913C21F9B260007A460F /* team.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = team.png; sourceTree = "<group>"; };
 		F7755B0421F718A200881DA8 /* settingIco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingIco.png; sourceTree = "<group>"; };
@@ -147,7 +145,6 @@
 		F71EB2AE21EF2DC5009810B9 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				F75E5458220429500094CC60 /* Info */,
 				F75E5457220429320094CC60 /* Main */,
 			);
 			path = ViewController;
@@ -246,7 +243,6 @@
 			isa = PBXGroup;
 			children = (
 				F74991BE21EF29C300BAB175 /* Main.storyboard */,
-				F75E5455220428E80094CC60 /* Info.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -257,16 +253,9 @@
 				F71EB2AF21EF2E08009810B9 /* Sport.swift */,
 				F75E545922042A090094CC60 /* Cerca.swift */,
 				F7C92DA621F9CEB2003A14C1 /* Preferiti.swift */,
+				F7651C70221443CC00E0ABBC /* Internet.swift */,
 			);
 			path = Main;
-			sourceTree = "<group>";
-		};
-		F75E5458220429500094CC60 /* Info */ = {
-			isa = PBXGroup;
-			children = (
-				F75AF2C4220469500075A474 /* LeagueInfo.swift */,
-			);
-			path = Info;
 			sourceTree = "<group>";
 		};
 		F76B913721F9B1B8007A460F /* Cerca */ = {
@@ -397,7 +386,6 @@
 				F71EB2CA21F09C2E009810B9 /* campoIco.png in Resources */,
 				F76B913B21F9B229007A460F /* player.png in Resources */,
 				F74991C521EF29C500BAB175 /* LaunchScreen.storyboard in Resources */,
-				F75E5456220428E80094CC60 /* Info.storyboard in Resources */,
 				F74991C221EF29C500BAB175 /* Assets.xcassets in Resources */,
 				F71EB2C821F09AD2009810B9 /* stellaIco.png in Resources */,
 				F71EB2CE21F09F85009810B9 /* info.png in Resources */,
@@ -436,11 +424,11 @@
 				F75E54532202FE0B0094CC60 /* elementoSport.swift in Sources */,
 				F71EB2B221EF2E27009810B9 /* Dati.swift in Sources */,
 				F75929B921FB1AC70033F4F8 /* League.swift in Sources */,
+				F7651C71221443CC00E0ABBC /* Internet.swift in Sources */,
 				F75929B621FAFCDC0033F4F8 /* ViewAttesa.swift in Sources */,
 				F71EB2B021EF2E08009810B9 /* Sport.swift in Sources */,
 				F75E54512202E8740094CC60 /* elementoRicerca.swift in Sources */,
 				F75E545A22042A090094CC60 /* Cerca.swift in Sources */,
-				F75AF2C5220469500075A474 /* LeagueInfo.swift in Sources */,
 				F74991BB21EF29C300BAB175 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -161,32 +161,16 @@ class Dati{
         }
     }
     
-    public static func creaView(dimensioni : [CGRect], imm : UIImage, testo : String, stella : [Bool], tag : Int) -> UIView{
-        let view = UIView(frame: dimensioni[0])
-        if dimensioni[1].size.width > -1{
-            let bottone = UIButton(frame: dimensioni[1])
-            bottone.setImage(UIImage(named: "cerchio.png"), for: .normal)
-            bottone.tag = tag
-            view.addSubview(bottone)
+    public static func immBandiera(stato : String) -> UIImage{
+        let dizionario = esenzialiRicerca(condizioni: ["Response"], lista: richiestraWeb(query: "http://countryapi.gear.host/v1/Country/getCountries?pName=" + nomeCorrettoStato(stato: stato)))[0]
+        return immagine(chiave: stato, url: (dizionario[0] as! NSDictionary).value(forKey: "FlagPng") as? String ?? "")
+    }
+    
+    private static func nomeCorrettoStato(stato : String) -> String{
+        if stato == "USA"{
+            return "United States of America"
         }
-        let label = UILabel(frame: dimensioni[2])
-        label.numberOfLines = 0
-        label.text = testo
-        label.textAlignment = NSTextAlignment.center
-        let immagine = UIImageView(frame: dimensioni[3])
-        immagine.image = imm
-        if stella[0] {
-            let immStella = UIImageView(frame: dimensioni[4])
-            if stella[1]{
-                immStella.image = UIImage(named: "stellaPiena.png")
-            }else{
-                immStella.image = UIImage(named: "stellaVuota.png")
-            }
-            view.addSubview(immStella)
-        }
-        view.addSubview(label)
-        view.addSubview(immagine)
-        return view
+        return stato
     }
     
     //---------------------------------------------------------------
