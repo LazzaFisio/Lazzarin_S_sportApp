@@ -74,6 +74,17 @@ class Cerca: UIViewController {
         view.endEditing(true)
     }
     
+    @IBAction func preferiti(_ sender: Any) {
+        let dizionario = elementi[(sender as! UIButton).tag]
+        if Dati.preferito(valore: dizionario.value(forKey: "id" + Cerca.ricerca) as! String, opzione: Cerca.ricerca){
+            Dati.cancellaPreferiti(valore: dizionario.value(forKey: "id" + Cerca.ricerca) as! String, opzione: Cerca.ricerca)
+            (sender as! UIButton).setBackgroundImage(UIImage(named: "stellaVuota"), for: .normal)
+        }else{
+            Dati.aggiungiPreferiti(valore: dizionario.value(forKey: "id" + Cerca.ricerca) as! String, opzione: Cerca.ricerca)
+            (sender as! UIButton).setBackgroundImage(UIImage(named: "stellaPiena"), for: .normal)
+        }
+    }
+    
     func threadAttesa(){
         thread.async {
             DispatchQueue.main.async {
@@ -147,7 +158,7 @@ extension Cerca : UICollectionViewDataSource, UICollectionViewDelegate{
                 nomeImm = "stellaPiena.png"
             }
             cella.stella.setBackgroundImage(UIImage(named: nomeImm), for: .normal)
-            cella.stella.tag = Int(id)!
+            cella.stella.tag = indexPath.row
             cella.stella.isHidden = false
         }else{
             cella.stella.isHidden = true

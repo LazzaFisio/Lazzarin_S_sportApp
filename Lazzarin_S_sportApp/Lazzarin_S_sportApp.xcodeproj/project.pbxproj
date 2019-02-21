@@ -32,6 +32,7 @@
 		F75E54512202E8740094CC60 /* elementoRicerca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E54502202E8740094CC60 /* elementoRicerca.swift */; };
 		F75E54532202FE0B0094CC60 /* elementoSport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E54522202FE0B0094CC60 /* elementoSport.swift */; };
 		F75E545A22042A090094CC60 /* Cerca.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75E545922042A090094CC60 /* Cerca.swift */; };
+		F75ED37C221D4A0E000F7308 /* Eventi.swift in Sources */ = {isa = PBXBuildFile; fileRef = F75ED37B221D4A0E000F7308 /* Eventi.swift */; };
 		F7651C71221443CC00E0ABBC /* Internet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7651C70221443CC00E0ABBC /* Internet.swift */; };
 		F76B913B21F9B229007A460F /* player.png in Resources */ = {isa = PBXBuildFile; fileRef = F76B913A21F9B229007A460F /* player.png */; };
 		F76B913D21F9B261007A460F /* team.png in Resources */ = {isa = PBXBuildFile; fileRef = F76B913C21F9B260007A460F /* team.png */; };
@@ -88,6 +89,7 @@
 		F75E54502202E8740094CC60 /* elementoRicerca.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = elementoRicerca.swift; sourceTree = "<group>"; };
 		F75E54522202FE0B0094CC60 /* elementoSport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = elementoSport.swift; sourceTree = "<group>"; };
 		F75E545922042A090094CC60 /* Cerca.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cerca.swift; sourceTree = "<group>"; };
+		F75ED37B221D4A0E000F7308 /* Eventi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Eventi.swift; sourceTree = "<group>"; };
 		F7651C70221443CC00E0ABBC /* Internet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Internet.swift; sourceTree = "<group>"; };
 		F76B913A21F9B229007A460F /* player.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player.png; sourceTree = "<group>"; };
 		F76B913C21F9B260007A460F /* team.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = team.png; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				F75E545922042A090094CC60 /* Cerca.swift */,
 				F7C92DA621F9CEB2003A14C1 /* Preferiti.swift */,
 				F7651C70221443CC00E0ABBC /* Internet.swift */,
+				F75ED37B221D4A0E000F7308 /* Eventi.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -429,6 +432,7 @@
 				F71EB2B021EF2E08009810B9 /* Sport.swift in Sources */,
 				F75E54512202E8740094CC60 /* elementoRicerca.swift in Sources */,
 				F75E545A22042A090094CC60 /* Cerca.swift in Sources */,
+				F75ED37C221D4A0E000F7308 /* Eventi.swift in Sources */,
 				F74991BB21EF29C300BAB175 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

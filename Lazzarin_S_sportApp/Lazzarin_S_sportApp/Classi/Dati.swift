@@ -132,13 +132,6 @@ class Dati{
         UserDefaults.standard.set(imm, forKey: chiave)
     }
     
-    public static func controllaEsistenzaImmagini(chiave : String, richiesta : String){
-        let data = UserDefaults.standard.value(forKey: chiave)
-        if  data == nil{
-            scaricaImmagine(stringa: richiesta, chiave: chiave)
-        }
-    }
-    
     public static func immagine(chiave : String, url : String) -> UIImage{
         var data = UserDefaults.standard.value(forKey: chiave)
         var immagine = UIImage()
