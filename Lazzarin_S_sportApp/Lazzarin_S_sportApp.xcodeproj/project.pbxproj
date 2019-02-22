@@ -18,6 +18,7 @@
 		F71EB2CA21F09C2E009810B9 /* campoIco.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2C921F09C2D009810B9 /* campoIco.png */; };
 		F71EB2CE21F09F85009810B9 /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2CD21F09F84009810B9 /* info.png */; };
 		F71EB2D221F1D16A009810B9 /* loader.png in Resources */ = {isa = PBXBuildFile; fileRef = F71EB2D121F1D168009810B9 /* loader.png */; };
+		F73332F4221E90110067471A /* NoEventi.swift in Sources */ = {isa = PBXBuildFile; fileRef = F73332F3221E90110067471A /* NoEventi.swift */; };
 		F74991BB21EF29C300BAB175 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74991BA21EF29C300BAB175 /* AppDelegate.swift */; };
 		F74991C021EF29C300BAB175 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F74991BE21EF29C300BAB175 /* Main.storyboard */; };
 		F74991C221EF29C500BAB175 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F74991C121EF29C500BAB175 /* Assets.xcassets */; };
@@ -69,6 +70,7 @@
 		F71EB2C921F09C2D009810B9 /* campoIco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = campoIco.png; sourceTree = "<group>"; };
 		F71EB2CD21F09F84009810B9 /* info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = info.png; sourceTree = "<group>"; };
 		F71EB2D121F1D168009810B9 /* loader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loader.png; sourceTree = "<group>"; };
+		F73332F3221E90110067471A /* NoEventi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoEventi.swift; sourceTree = "<group>"; };
 		F74991B721EF29C300BAB175 /* Lazzarin_S_sportApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lazzarin_S_sportApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F74991BA21EF29C300BAB175 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F74991BF21EF29C300BAB175 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 				F75929B821FB1AC70033F4F8 /* League.swift */,
 				F75E54502202E8740094CC60 /* elementoRicerca.swift */,
 				F75E54522202FE0B0094CC60 /* elementoSport.swift */,
+				F73332F3221E90110067471A /* NoEventi.swift */,
 			);
 			path = Celle;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				F71EB2B221EF2E27009810B9 /* Dati.swift in Sources */,
 				F75929B921FB1AC70033F4F8 /* League.swift in Sources */,
 				F7651C71221443CC00E0ABBC /* Internet.swift in Sources */,
+				F73332F4221E90110067471A /* NoEventi.swift in Sources */,
 				F75929B621FAFCDC0033F4F8 /* ViewAttesa.swift in Sources */,
 				F71EB2B021EF2E08009810B9 /* Sport.swift in Sources */,
 				F75E54512202E8740094CC60 /* elementoRicerca.swift in Sources */,

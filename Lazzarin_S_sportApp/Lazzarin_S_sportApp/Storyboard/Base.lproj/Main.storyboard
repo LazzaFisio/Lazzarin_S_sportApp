@@ -253,9 +253,8 @@
                                     <action selector="cambioData:" destination="gmg-9f-Kfk" eventType="valueChanged" id="jfx-Lz-xXF"/>
                                 </connections>
                             </datePicker>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NQa-gb-Vkr">
-                                <rect key="frame" x="0.0" y="229" width="375" height="389"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NQa-gb-Vkr">
+                                <rect key="frame" x="0.0" y="231" width="375" height="387"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="97K-Xq-G3I">
                                     <size key="itemSize" width="375" height="108"/>
@@ -264,8 +263,28 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Partita" id="Js8-sP-xwI" customClass="League" customModule="Lazzarin_S_sportApp" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NoEventi" id="jxX-df-Itv" customClass="NoEventi" customModule="Lazzarin_S_sportApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="108"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="108"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nessun dato trovato" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mGl-xr-tRr">
+                                                    <rect key="frame" x="100.5" y="42" width="174.5" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="mGl-xr-tRr" firstAttribute="centerX" secondItem="jxX-df-Itv" secondAttribute="centerX" id="cEQ-qB-1BX"/>
+                                            <constraint firstItem="mGl-xr-tRr" firstAttribute="centerY" secondItem="jxX-df-Itv" secondAttribute="centerY" id="f9o-CT-oQv"/>
+                                        </constraints>
+                                    </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Partita" id="Js8-sP-xwI" customClass="League" customModule="Lazzarin_S_sportApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="118" width="375" height="108"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="108"/>
@@ -355,13 +374,17 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="NQa-gb-Vkr" firstAttribute="trailing" secondItem="gT4-LG-bRH" secondAttribute="trailing" id="0vT-ud-ISS"/>
                             <constraint firstItem="YGv-Mj-X8o" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="HpX-kU-dUW" secondAttribute="trailing" constant="8" symbolic="YES" id="2zp-Iz-snh"/>
+                            <constraint firstItem="NQa-gb-Vkr" firstAttribute="leading" secondItem="gT4-LG-bRH" secondAttribute="leading" id="8Gf-ji-4mf"/>
                             <constraint firstItem="gT4-LG-bRH" firstAttribute="trailing" secondItem="YGv-Mj-X8o" secondAttribute="trailing" constant="15" id="AR6-CC-2iM"/>
+                            <constraint firstItem="NQa-gb-Vkr" firstAttribute="top" secondItem="YGv-Mj-X8o" secondAttribute="bottom" constant="10" id="H5r-9B-EZ7"/>
                             <constraint firstItem="8DQ-bm-33L" firstAttribute="top" secondItem="gT4-LG-bRH" secondAttribute="top" constant="20" id="SjC-VF-R6c"/>
                             <constraint firstItem="YGv-Mj-X8o" firstAttribute="centerY" secondItem="HpX-kU-dUW" secondAttribute="centerY" id="buJ-ue-ozI"/>
                             <constraint firstItem="8DQ-bm-33L" firstAttribute="centerX" secondItem="gT4-LG-bRH" secondAttribute="centerX" id="d2S-ez-AbO"/>
                             <constraint firstItem="HpX-kU-dUW" firstAttribute="top" secondItem="gT4-LG-bRH" secondAttribute="top" constant="115" id="fks-91-OBa"/>
                             <constraint firstItem="HpX-kU-dUW" firstAttribute="leading" secondItem="gT4-LG-bRH" secondAttribute="leading" constant="15" id="jBO-ci-Pva"/>
+                            <constraint firstItem="NQa-gb-Vkr" firstAttribute="bottom" secondItem="gT4-LG-bRH" secondAttribute="bottom" id="kVo-Zb-1k8"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gT4-LG-bRH"/>
                     </view>
