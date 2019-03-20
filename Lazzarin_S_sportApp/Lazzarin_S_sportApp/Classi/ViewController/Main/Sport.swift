@@ -190,6 +190,7 @@ class Sport: UIViewController {
             }
             Internet.richiesta =  "https://www.google.com/search?q=" + daCercare
         }
+        Internet.richiesta = Internet.richiesta.replacingOccurrences(of: " ", with: "%20")
         present((storyboard?.instantiateViewController(withIdentifier: "Internet"))!, animated: true, completion: nil)
     }
     

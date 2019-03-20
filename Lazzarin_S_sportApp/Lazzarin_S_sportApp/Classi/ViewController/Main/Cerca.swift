@@ -18,15 +18,19 @@ class Cerca: UIViewController {
     
     @IBOutlet weak var nomiSport: UIPickerView!
     
+    @IBOutlet weak var togliTastiera: UIButton!
+    
     var thread = DispatchQueue.global(qos: .default)
     var elementi = [NSDictionary]()
     var ricercaAttuale = [NSDictionary]()
     static var ricerca = "League"
     var sportScelto = "Rugby"
     var query = ""
+    var dati = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        cerca.delegate = self
         nomiSport.delegate = self
         nomiSport.dataSource = self
         contenitore.dataSource = self
@@ -48,6 +52,8 @@ class Cerca: UIViewController {
     
     @IBAction func cambiaRicerca(_ sender: Any) {
         Cerca.ricerca = dettagliCerca.titleForSegment(at: dettagliCerca.selectedSegmentIndex)!
+        cerca.text = ""
+        dati = -1
         threadAttesa()
     }
     
@@ -64,14 +70,23 @@ class Cerca: UIViewController {
                 }
                 i += 1
             }
-            
-        }
+            dati = 1
+            if ricercaAttuale.count == 0{
+                ricercaAttuale.append(NSDictionary())
+                dati = 0
+            }
+        }else { dati = -1 }
         contenitore.reloadData()
         cerca.isSelected = true
     }
     
+    @IBAction func inizioRicerca(_ sender: Any) {
+        togliTastiera.isHidden = false
+    }
+    
     @IBAction func fineRicerca(_ sender: Any) {
         view.endEditing(true)
+        togliTastiera.isHidden = true
     }
     
     @IBAction func preferiti(_ sender: Any) {
@@ -129,7 +144,7 @@ extension Cerca: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelega
 
 extension Cerca : UICollectionViewDataSource, UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if ricercaAttuale.count > 0 && ricercaAttuale.count < 50{
+        if dati > -1 {
             return ricercaAttuale.count
         }
         return elementi.count
@@ -138,28 +153,30 @@ extension Cerca : UICollectionViewDataSource, UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cella = contenitore.dequeueReusableCell(withReuseIdentifier: "Visualizza", for: indexPath) as! elementoRicerca
         var appoggio = elementi[indexPath.row]
-        if ricercaAttuale.count > 0{
-            appoggio = ricercaAttuale[indexPath.row]
-        }
-        let id = appoggio.value(forKey: "id" + Cerca.ricerca) as! String
-        cella.immagine.image = Dati.immagine(chiave: id, url: appoggio.value(forKey: Dati.codImm(ricerca: Cerca.ricerca)) as? String ?? "")
-        cella.nome.text = appoggio.value(forKey: "str" + Cerca.ricerca) as? String ?? ""
-        if Cerca.ricerca != "Player"{
-            var nomeImm = "stellaVuota.png"
-            if Dati.preferito(valore: id, opzione: Cerca.ricerca){
-                nomeImm = "stellaPiena.png"
-            }
-            cella.stella.setBackgroundImage(UIImage(named: nomeImm), for: .normal)
-            cella.stella.tag = indexPath.row
-            cella.stella.isHidden = false
-        }else{
+        if dati == 0{
+            cella.nome.text = "Nessun dato trovato"
+            cella.immagine.isHidden = true
             cella.stella.isHidden = true
+        }else{
+            cella.immagine.isHidden = false
+            if ricercaAttuale.count > 0{
+                appoggio = ricercaAttuale[indexPath.row]
+            }
+            let id = appoggio.value(forKey: "id" + Cerca.ricerca) as! String
+            cella.immagine.image = Dati.immagine(chiave: id, url: appoggio.value(forKey: Dati.codImm(ricerca: Cerca.ricerca)) as? String ?? "")
+            cella.nome.text = appoggio.value(forKey: "str" + Cerca.ricerca) as? String ?? ""
+            if Cerca.ricerca != "Player"{
+                var nomeImm = "stellaVuota.png"
+                if Dati.preferito(valore: id, opzione: Cerca.ricerca){
+                    nomeImm = "stellaPiena.png"
+                }
+                cella.stella.setBackgroundImage(UIImage(named: nomeImm), for: .normal)
+                cella.stella.tag = indexPath.row
+                cella.stella.isHidden = false
+            }else{
+                cella.stella.isHidden = true
+            }
         }
         return cella
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-    }
-    
 }

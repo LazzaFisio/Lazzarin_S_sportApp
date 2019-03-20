@@ -249,6 +249,12 @@
                                 <date key="date" timeIntervalSinceReferenceDate="572254268.48078203">
                                     <!--2019-02-19 07:31:08 +0000-->
                                 </date>
+                                <date key="minimumDate" timeIntervalSinceReferenceDate="-978267600">
+                                    <!--1970-01-01 11:00:00 +0000-->
+                                </date>
+                                <date key="maximumDate" timeIntervalSinceReferenceDate="1167562800">
+                                    <!--2037-12-31 11:00:00 +0000-->
+                                </date>
                                 <connections>
                                     <action selector="cambioData:" destination="gmg-9f-Kfk" eventType="valueChanged" id="jfx-Lz-xXF"/>
                                 </connections>
@@ -290,13 +296,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="108"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dcr-qL-k6O">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dcr-qL-k6O">
                                                     <rect key="frame" x="80" y="10" width="212" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="InU-WT-qNo"/>
                                                         <constraint firstAttribute="width" constant="212" id="kac-eT-d2B"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -310,13 +316,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sA6-BU-UVg">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sA6-BU-UVg">
                                                     <rect key="frame" x="80" y="58" width="213" height="40"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="40" id="DP5-6v-C6Y"/>
                                                         <constraint firstAttribute="width" constant="213" id="vz9-st-ASr"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -657,7 +663,7 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="search"/>
                                 <connections>
                                     <action selector="aggiornaRicerca:" destination="fjh-e5-ZEy" eventType="editingChanged" id="1sN-pQ-6wu"/>
-                                    <action selector="fineRicerca:" destination="fjh-e5-ZEy" eventType="editingDidEnd" id="leJ-gh-xjd"/>
+                                    <action selector="inizioRicerca:" destination="fjh-e5-ZEy" eventType="editingDidBegin" id="1KZ-f2-xcv"/>
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sport da cercare:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eEL-Eb-Dcx">
@@ -760,6 +766,12 @@
                                     <action selector="back:" destination="fjh-e5-ZEy" eventType="touchUpInside" id="V5i-3e-hCR"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DlT-MY-9Y1">
+                                <rect key="frame" x="0.0" y="98" width="375" height="569"/>
+                                <connections>
+                                    <action selector="fineRicerca:" destination="fjh-e5-ZEy" eventType="touchDown" id="DHc-iA-L4d"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -768,15 +780,19 @@
                             <constraint firstItem="EFl-RW-ohQ" firstAttribute="leading" secondItem="eEL-Eb-Dcx" secondAttribute="trailing" constant="18" id="9Jz-18-vON"/>
                             <constraint firstItem="SHC-U3-gDm" firstAttribute="top" secondItem="eEL-Eb-Dcx" secondAttribute="bottom" constant="40" id="AJi-aK-vgb"/>
                             <constraint firstItem="EFl-RW-ohQ" firstAttribute="centerY" secondItem="eEL-Eb-Dcx" secondAttribute="centerY" id="BJP-hA-I6C"/>
+                            <constraint firstAttribute="bottom" secondItem="DlT-MY-9Y1" secondAttribute="bottom" id="CfD-lc-59e"/>
                             <constraint firstItem="QPh-2r-jA2" firstAttribute="trailing" secondItem="EFl-RW-ohQ" secondAttribute="trailing" constant="43" id="Eyu-Ug-XlD"/>
                             <constraint firstItem="S0m-vg-FAH" firstAttribute="top" secondItem="SHC-U3-gDm" secondAttribute="bottom" constant="3" id="GMk-nH-Ejp"/>
                             <constraint firstItem="QPh-2r-jA2" firstAttribute="bottom" secondItem="S0m-vg-FAH" secondAttribute="bottom" id="GQw-lc-2JS"/>
                             <constraint firstItem="LOJ-fV-vG8" firstAttribute="centerY" secondItem="7Rt-5h-IoC" secondAttribute="centerY" id="Uuz-Kc-2XY"/>
+                            <constraint firstItem="DlT-MY-9Y1" firstAttribute="trailing" secondItem="QPh-2r-jA2" secondAttribute="trailing" id="VOo-Hg-VnP"/>
+                            <constraint firstItem="DlT-MY-9Y1" firstAttribute="top" secondItem="7Rt-5h-IoC" secondAttribute="bottom" id="ccU-zM-GYN"/>
                             <constraint firstItem="QPh-2r-jA2" firstAttribute="trailing" secondItem="S0m-vg-FAH" secondAttribute="trailing" id="cmk-hB-RLJ"/>
                             <constraint firstItem="eEL-Eb-Dcx" firstAttribute="top" secondItem="7Rt-5h-IoC" secondAttribute="bottom" constant="37" id="eR5-H3-lKq"/>
                             <constraint firstItem="SHC-U3-gDm" firstAttribute="trailing" secondItem="QPh-2r-jA2" secondAttribute="trailing" id="gUa-Hf-jlt"/>
                             <constraint firstItem="7Rt-5h-IoC" firstAttribute="top" secondItem="QPh-2r-jA2" secondAttribute="top" constant="43" id="hbo-gW-M5X"/>
                             <constraint firstItem="7Rt-5h-IoC" firstAttribute="leading" secondItem="QPh-2r-jA2" secondAttribute="leading" constant="25" id="sJb-56-sJf"/>
+                            <constraint firstItem="DlT-MY-9Y1" firstAttribute="leading" secondItem="QPh-2r-jA2" secondAttribute="leading" id="soa-OD-g0z"/>
                             <constraint firstItem="eEL-Eb-Dcx" firstAttribute="leading" secondItem="QPh-2r-jA2" secondAttribute="leading" constant="51" id="uPL-ZG-vOq"/>
                             <constraint firstItem="QPh-2r-jA2" firstAttribute="trailing" secondItem="LOJ-fV-vG8" secondAttribute="trailing" constant="24" id="ueJ-PL-SCC"/>
                             <constraint firstItem="SHC-U3-gDm" firstAttribute="leading" secondItem="QPh-2r-jA2" secondAttribute="leading" id="xI0-Yc-Egs"/>
@@ -788,11 +804,12 @@
                         <outlet property="contenitore" destination="S0m-vg-FAH" id="rkZ-PB-OvY"/>
                         <outlet property="dettagliCerca" destination="SHC-U3-gDm" id="8zo-rb-YAI"/>
                         <outlet property="nomiSport" destination="EFl-RW-ohQ" id="P9J-mm-wD0"/>
+                        <outlet property="togliTastiera" destination="DlT-MY-9Y1" id="BQ1-Bp-4yi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qEd-mZ-NYA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1626" y="1305"/>
+            <point key="canvasLocation" x="-1626.4000000000001" y="1304.7976011994003"/>
         </scene>
         <!--Internet-->
         <scene sceneID="IKG-99-uDE">

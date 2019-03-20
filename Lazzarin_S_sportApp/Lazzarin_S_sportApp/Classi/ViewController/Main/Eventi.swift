@@ -44,12 +44,6 @@ class Eventi: UIViewController {
                 for item in appoggio{
                     elementi.append(item)
                 }
-                appoggio = Dati.esenzialiRicerca(condizioni:condizioni, lista: Dati.richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/eventsday.php?d=" + data + "&s=Motorsport"))
-                if appoggio.count > 0{
-                    for item in appoggio{
-                        elementi.append(item)
-                    }
-                }
                 for item in elementi{
                     appoggio = Dati.esenzialiRicerca(condizioni: ["idTeam", "strTeam"], lista: Dati.richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" + (item.value(forKey: "idLeague") as! String)))
                     for squadra in appoggio{
