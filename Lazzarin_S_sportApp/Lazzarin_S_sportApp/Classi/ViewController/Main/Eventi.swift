@@ -84,8 +84,8 @@ extension Eventi : UICollectionViewDelegate, UICollectionViewDataSource{
             let cella = collectionView.dequeueReusableCell(withReuseIdentifier: "Partita", for: indexPath) as! League
             let idSquadra1 = trovaSquadra(nome: elementi[indexPath.row].value(forKey: "strHomeTeam") as! String)
             let idSquadra2 = trovaSquadra(nome: elementi[indexPath.row].value(forKey: "strAwayTeam") as! String)
-            cella.immSqr1.image = Dati.immagine(chiave: idSquadra1, url: "")
-            cella.immSqr2.image = Dati.immagine(chiave: idSquadra2, url: "")
+            cella.immSqr1.image = Dati.immagine(chiave: idSquadra1, url: elementi[indexPath.row].value(forKey: Dati.codImm(ricerca: "Team")) as? String ?? "")
+            cella.immSqr2.image = Dati.immagine(chiave: idSquadra2, url: elementi[indexPath.row].value(forKey: Dati.codImm(ricerca: "Team")) as? String ?? "")
             cella.nomeSqr1.text = elementi[indexPath.row].value(forKey: "strHomeTeam") as? String
             cella.nomeSqr2.text = elementi[indexPath.row].value(forKey: "strAwayTeam") as? String
             cella.puntSqr1.text = elementi[indexPath.row].value(forKey: "intHomeScore") as? String

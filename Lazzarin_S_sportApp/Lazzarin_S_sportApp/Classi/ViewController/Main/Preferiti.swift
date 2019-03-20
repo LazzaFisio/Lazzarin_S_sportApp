@@ -78,8 +78,11 @@ class Preferiti: UIViewController {
             if self.elementoScelto.count > 0{
                 self.trovaStagione()
                 self.trovaSqudre(row: 0)
-                dimensione = self.selezionaRoundAttuale(row: 0)
-                self.trovaMatchRound(round: dimensione)
+                if self.sportLeague(id: self.elementoScelto.value(forKey: "idLeague") as! String) == "Rugby" {
+                    dimensione = self.selezionaRoundAttuale(row: 0)
+                    self.trovaMatchRound(round: dimensione)
+                }
+                
             }else{
                 self.cancellaTutto()
             }
@@ -328,7 +331,9 @@ class Preferiti: UIViewController {
         if elementoScelto.count > 0{
             trovaStagione()
             trovaSqudre(row: 0)
-            trovaMatchRound(round: selezionaRoundAttuale(row: 0))
+            if sportLeague(id: elementoScelto.value(forKey: "idLeague") as! String) == "Rugby"{
+                trovaMatchRound(round: selezionaRoundAttuale(row: 0))
+            }
         }
         DispatchQueue.main.async {
             self.numStagioni.selectRow(0, inComponent: 0, animated: true)
@@ -371,6 +376,10 @@ class Preferiti: UIViewController {
         return reverse
     }
     
+    func sportLeague(id : String) -> String{
+        let dizionario = Dati.esenzialiRicerca(condizioni: ["strSport"], lista: Dati.richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/lookupleague.php?id=" + id))
+        return dizionario[0].value(forKey: "strSport") as! String
+    }
 }
 
 extension Preferiti: UIPickerViewDelegate, UIPickerViewDataSource{

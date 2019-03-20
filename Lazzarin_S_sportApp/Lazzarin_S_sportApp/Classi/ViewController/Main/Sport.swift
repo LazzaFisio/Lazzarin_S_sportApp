@@ -22,8 +22,8 @@ class Sport: UIViewController {
     @IBOutlet weak var contenitore: UICollectionView!
     
     var elementi = [NSDictionary]()
-    var azioneBottone = #selector(azioneSport(sender:))
-    static var ricerca = ""
+    var azioneBottone = #selector(azioneLeghe(sender:))
+    static var ricerca = "League"
     var timer = Timer()
     var secondi = 0, numCella = 0
     var bottoneSelezionato = UIButton()
@@ -31,12 +31,12 @@ class Sport: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        creaSport()
         attesa.isHidden = true
         Dati.caricaPreferiti()
         Dati.viewAttesa = ViewAttesa(view: view, valore: "Carico...", colore: attesa.backgroundColor!)
         contenitore.dataSource = self
         contenitore.delegate = self
+        cambiaView(query: "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=Rugby", titolo: "Rugby", tag: -1, preferiti: false)
         //UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
     }
     
@@ -46,12 +46,10 @@ class Sport: UIViewController {
     
     @IBAction func indietro(_ sender: Any) {
         errore.isHidden = true
-        if Sport.ricerca == "League"{
-            creaSport()
-            contenitore.reloadData()
-        }else if Sport.ricerca == "Team"{
+        if Sport.ricerca == "Team"{
             let sport = Dati.selezionato.value(forKey: "strSport") as! String
             Sport.ricerca = "League"
+            back.isHidden = true
             azioneBottone = #selector(azioneLeghe(sender:))
             cambiaView(query: "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, titolo: sport.uppercased(), tag: -1, preferiti: false)
         }else{
@@ -117,26 +115,13 @@ class Sport: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    @objc func azioneSport(sender : UIButton!){
-        if timer.isValid{
-            timer.invalidate()
-            var sport = ""
-            switch sender.tag {
-            case 1: sport = "Motorsport"; break
-            default: sport = "Rugby"; break
-            }
-            Sport.ricerca = "League"
-            azioneBottone = #selector(azioneLeghe(sender:))
-            cambiaView(query: "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=" + sport, titolo: sport.uppercased(), tag: sender.tag, preferiti: false)
-        }
-    }
-    
     @objc func azioneLeghe(sender : UIButton!){
         if timer.isValid{
             timer.invalidate()
             var nome = elementi[sender.tag].value(forKey: "strLeague") as! String
             nome = nome.replacingOccurrences(of: " ", with: "_")
             Sport.ricerca = "Team"
+            back.isHidden = false
             azioneBottone = #selector(azioneTeam(sender:))
             cambiaView(query: "https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l=" + nome, titolo: (elementi[sender.tag].value(forKey: "strLeague") as! String).uppercased(), tag: sender.tag, preferiti: false)
             
@@ -157,23 +142,6 @@ class Sport: UIViewController {
         
     }
     
-    func creaSport(){
-        elementi.removeAll()
-        var app = NSMutableDictionary()
-        app.setValue("Rugby", forKey: "nome")
-        app.setValue("rugby.png", forKey: "imm")
-        elementi.append(app)
-        app = NSMutableDictionary()
-        app.setValue("Motorsport", forKey: "nome")
-        app.setValue("motorsport.png", forKey: "imm")
-        elementi.append(app)
-        azioneBottone = #selector(azioneSport(sender:))
-        titolo.text = "TUTTI GLI SPORT"
-        Sport.ricerca = ""
-        back.isHidden = true
-        info.isHidden = true
-    }
-    
     func cambiaView(query : String, titolo : String, tag : Int, preferiti : Bool){
         let thread  = DispatchQueue.global(qos: .background)
         thread.async {
@@ -186,20 +154,6 @@ class Sport: UIViewController {
             }
             if query != ""{
                 self.elementi = Dati.richiestraWeb(query: query)
-            }
-            if self.elementi.count > 0{
-                DispatchQueue.main.async {
-                    self.titolo.text = titolo
-                    self.back.isHidden = false
-                    self.info.isHidden = false
-                }
-            }else {
-                self.elementi.removeAll()
-                DispatchQueue.main.async {
-                    self.titolo.text = titolo
-                    self.errore.isHidden = false
-                    self.back.isHidden = false
-                }
             }
             DispatchQueue.main.async {
                 self.contenitore.reloadData()

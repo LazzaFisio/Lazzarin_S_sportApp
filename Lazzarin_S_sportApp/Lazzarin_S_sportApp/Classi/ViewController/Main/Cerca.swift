@@ -115,23 +115,15 @@ extension Cerca: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelega
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 2
+        return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return sport(tag: row)
+        return "Rugby"
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        sportScelto = sport(tag: row)
         threadAttesa()
-    }
-    
-    func sport(tag : Int) -> String{
-        switch tag{
-        case 1: return "Motorsport"
-        default: return "Rugby"
-        }
     }
 }
 
