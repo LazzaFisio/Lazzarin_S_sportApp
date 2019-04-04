@@ -11,13 +11,14 @@ import UIKit
 
 class ViewAttesa{
     
+    let tabBar : UITabBar!
     let view : UIView!
     var immagine : UIImageView!
     var label : UILabel!
     var bottone : UIButton!
     var ruota = false
     
-    init(view : UIView, valore : String, colore : UIColor) {
+    init(view : UIView, valore : String, colore : UIColor, tabBar : UITabBar) {
         self.view = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         self.view.backgroundColor = colore
         immagine = UIImageView(frame: CGRect(x: (view.frame.width / 2) - 30, y: (view.frame.height / 2) - 30, width: 60, height: 60))
@@ -31,6 +32,7 @@ class ViewAttesa{
         self.view.addSubview(immagine)
         self.view.addSubview(label)
         self.view.isHidden = true
+        self.tabBar = tabBar
         view.addSubview(self.view)
     }
     
@@ -51,12 +53,18 @@ class ViewAttesa{
     public func avviaRotazione(){
         ruota = true
         view.isHidden = false
+        for item in tabBar.items!{
+            item.isEnabled = false
+        }
         eseguiRotazione()
     }
     
     public func fermaRotazione(){
         ruota = false
         view.isHidden = true
+        for item in tabBar.items!{
+            item.isEnabled = true
+        }
     }
     
     private func eseguiRotazione(){

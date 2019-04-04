@@ -42,6 +42,7 @@ class Preferiti: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        Dati.viewAttesa.fermaRotazione()
         Dati.viewAttesa.aggiungiAllaView(view: view)
         league.removeAll()
         self.league = self.caricaValori(item: Dati.preferiti[0])
@@ -77,12 +78,13 @@ class Preferiti: UIViewController {
             }
             if self.elementoScelto.count > 0{
                 self.trovaStagione()
-                self.trovaSqudre(row: 0)
-                if self.sportLeague(id: self.elementoScelto.value(forKey: "idLeague") as! String) == "Rugby" {
-                    dimensione = self.selezionaRoundAttuale(row: 0)
-                    self.trovaMatchRound(round: dimensione)
+                if self.stagione.count > 0{
+                    self.trovaSqudre(row: 0)
+                    if self.sportLeague(id: self.elementoScelto.value(forKey: "idLeague") as! String) == "Rugby" {
+                        dimensione = self.selezionaRoundAttuale(row: 0)
+                        self.trovaMatchRound(round: dimensione)
+                    }
                 }
-                
             }else{
                 self.cancellaTutto()
             }
@@ -126,8 +128,11 @@ class Preferiti: UIViewController {
                 if nome == "Team"{
                     appoggio.append("idLeague")
                 }
-                elementi.append(Dati.esenzialiRicerca(condizioni: appoggio, lista: Dati.richiestraWeb(query: query + id))[0])
-                elementi[elementi.count - 1].setValue(nome, forKey: "nome")
+                let array = Dati.esenzialiRicerca(condizioni: appoggio, lista: Dati.richiestraWeb(query: query + id))
+                if array.count > 0{
+                    elementi.append(array[0])
+                    elementi[elementi.count - 1].setValue(nome, forKey: "nome")
+                }
             }
         }
         return elementi
@@ -247,13 +252,15 @@ class Preferiti: UIViewController {
         let query = "https://www.thesportsdb.com/api/v1/json/1/search_all_seasons.php?id=" + (elementoScelto.value(forKey: "idLeague") as! String)
         let risultato = Dati.richiestraWeb(query: query)
         self.stagione.removeAll()
-        for i in 0...risultato.count - 1{
-            let stagione = risultato[i].value(forKey: "strSeason") as! String
-            self.stagione.append(stagione + ";")
-            aggiornaElementiRound(row: i, caricaStagione: true, caricaRound: false)
+        if risultato.count > 0{
+            for i in 0...risultato.count - 1{
+                let stagione = risultato[i].value(forKey: "strSeason") as! String
+                self.stagione.append(stagione + ";")
+                aggiornaElementiRound(row: i, caricaStagione: true, caricaRound: false)
+            }
+            stagione.reverse()
+            aggiornaElementiRound(row: 0, caricaStagione: false, caricaRound: true)
         }
-        stagione.reverse()
-        aggiornaElementiRound(row: 0, caricaStagione: false, caricaRound: true)
     }
     
     func selezionaRoundAttuale(row : Int) -> Int{
@@ -330,9 +337,15 @@ class Preferiti: UIViewController {
         }
         if elementoScelto.count > 0{
             trovaStagione()
-            trovaSqudre(row: 0)
-            if sportLeague(id: elementoScelto.value(forKey: "idLeague") as! String) == "Rugby"{
-                trovaMatchRound(round: selezionaRoundAttuale(row: 0))
+            if stagione.count > 0{
+                trovaSqudre(row: 0)
+                if sportLeague(id: elementoScelto.value(forKey: "idLeague") as! String) == "Rugby"{
+                    trovaMatchRound(round: selezionaRoundAttuale(row: 0))
+                }
+            }else{
+                stagione.removeAll()
+                round.removeAll()
+                match.removeAll()
             }
         }
         DispatchQueue.main.async {
@@ -396,10 +409,13 @@ extension Preferiti: UIPickerViewDelegate, UIPickerViewDataSource{
                 return team.count
             }
             return 1
-        }else if pickerView.tag == 1{
+        }else if pickerView.tag == 1 && round.count > 0{
             return round.count
         }
-        return stagione.count
+        if stagione.count > 0{
+            return stagione.count
+        }
+        return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
@@ -433,11 +449,15 @@ extension Preferiti: UIPickerViewDelegate, UIPickerViewDataSource{
         }
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 85, height: 20))
         let label = UILabel(frame: CGRect(x: 0, y: 2, width: 85, height: 15))
-        if pickerView.tag == 1{
-            label.text = round[row]
+        if stagione.count > 0{
+            if pickerView.tag == 1{
+                label.text = round[row]
+            }else{
+                label.text = String(stagione[row].split(separator: ";")[1])
+                label.font = UIFont(name: label.font.fontName, size: 15)
+            }
         }else{
-            label.text = String(stagione[row].split(separator: ";")[1])
-            label.font = UIFont(name: label.font.fontName, size: 15)
+            label.text = "No data"
         }
         label.textAlignment = NSTextAlignment.center
         view.addSubview(label)
@@ -445,7 +465,11 @@ extension Preferiti: UIPickerViewDelegate, UIPickerViewDataSource{
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        aggiorna(row: row, tag: pickerView.tag)
+        if stagione.count > 0{
+            aggiorna(row: row, tag: pickerView.tag)
+        }else if pickerView.tag == 0{
+            aggiorna(row: row, tag: pickerView.tag)
+        }
     }
 }
 
@@ -455,12 +479,14 @@ extension Preferiti: UICollectionViewDelegate, UICollectionViewDataSource{
         if match.count > 0{
             return match.count
         }
-        return 0
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let appoggio = contenitore.dequeueReusableCell(withReuseIdentifier: "League", for: indexPath) as! League
-        return caricaLeague(dizionario: match[indexPath.row], cella: appoggio)
+        if match.count == 0{
+            return contenitore.dequeueReusableCell(withReuseIdentifier: "NoData", for: indexPath)
+        }
+        return caricaLeague(dizionario: match[indexPath.row], cella: contenitore.dequeueReusableCell(withReuseIdentifier: "League", for: indexPath) as! League)
     }
     
     func caricaLeague(dizionario : NSDictionary, cella : League) -> UICollectionViewCell{

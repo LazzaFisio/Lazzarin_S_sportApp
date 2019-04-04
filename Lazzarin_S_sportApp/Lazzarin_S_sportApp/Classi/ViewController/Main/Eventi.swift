@@ -14,6 +14,8 @@ class Eventi: UIViewController {
     
     @IBOutlet weak var contenitore: UICollectionView!
     
+    @IBOutlet weak var giorno: UILabel!
+    
     var elementi = [NSDictionary]()
     var teams = [NSDictionary]()
     var trovati = false
@@ -26,6 +28,7 @@ class Eventi: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        ottieniGiorno()
         Dati.viewAttesa.aggiungiAllaView(view: view)
     }
 
@@ -35,32 +38,41 @@ class Eventi: UIViewController {
         let composizioneData = DateFormatter()
         composizioneData.dateFormat = "yyyy-MM-dd"
         let data = composizioneData.string(from: dataScelta.date)
+        DispatchQueue.main.async {
+            self.ottieniGiorno()
+        }
         Dati.viewAttesa.avviaRotazione()
-        DispatchQueue.global().sync {
+        DispatchQueue.global().async{
             let condizioni = ["idLeague", "strHomeTeam", "strAwayTeam", "intHomeScore", "intAwayScore"]
             var appoggio = Dati.esenzialiRicerca(condizioni:condizioni, lista: Dati.richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/eventsday.php?d=" + data + "&s=Rugby"))
             if appoggio.count > 0{
-                trovati = true
+                self.trovati = true
                 for item in appoggio{
-                    elementi.append(item)
+                    self.elementi.append(item)
                 }
-                for item in elementi{
+                for item in self.elementi{
                     appoggio = Dati.esenzialiRicerca(condizioni: ["idTeam", "strTeam"], lista: Dati.richiestraWeb(query: "https://www.thesportsdb.com/api/v1/json/1/lookup_all_teams.php?id=" + (item.value(forKey: "idLeague") as! String)))
                     for squadra in appoggio{
                         let squadra1 = item.value(forKey: "strHomeTeam") as! String
                         let squadra2 = item.value(forKey: "strAwayTeam") as! String
                         let squadraP = squadra.value(forKey: "strTeam") as! String
                         if squadra1 == squadraP || squadra2 == squadraP {
-                            teams.append(squadra)
+                            self.teams.append(squadra)
                         }
                     }
                 }
-            }else { trovati = false }
+            }else { self.trovati = false }
             DispatchQueue.main.async {
                 self.contenitore.reloadData()
+                Dati.viewAttesa.fermaRotazione()
             }
         }
-        Dati.viewAttesa.fermaRotazione()
+    }
+    
+    func ottieniGiorno(){
+        let composizioneData = DateFormatter()
+        composizioneData.dateFormat = "EEEE"
+        giorno.text = composizioneData.string(from: dataScelta.date)
     }
 }
 

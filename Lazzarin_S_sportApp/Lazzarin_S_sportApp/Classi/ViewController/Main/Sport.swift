@@ -33,7 +33,7 @@ class Sport: UIViewController {
         super.viewDidLoad()
         attesa.isHidden = true
         Dati.caricaPreferiti()
-        Dati.viewAttesa = ViewAttesa(view: view, valore: "Carico...", colore: attesa.backgroundColor!)
+        Dati.viewAttesa = ViewAttesa(view: view, valore: "Carico...", colore: attesa.backgroundColor!, tabBar: tabBarController!.tabBar)
         contenitore.dataSource = self
         contenitore.delegate = self
         cambiaView(query: "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?s=Rugby", titolo: "Rugby", tag: -1, preferiti: false)
@@ -42,6 +42,7 @@ class Sport: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         Dati.viewAttesa.aggiungiAllaView(view: view)
+        Dati.viewAttesa.fermaRotazione()
     }
     
     @IBAction func indietro(_ sender: Any) {
